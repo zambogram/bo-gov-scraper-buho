@@ -129,14 +129,15 @@ sites:
 
   gaceta_oficial:
     id: gaceta_oficial
-    nombre: "Gaceta Oficial de Bolivia"
-    tipo: "Gaceta"
+    nombre: "Gaceta Oficial del Estado Plurinacional de Bolivia"
+    tipo: "Gaceta Oficial"
     categoria: "Publicación Oficial"
-    url_base: "https://www.gacetaoficialdebolivia.gob.bo"
-    url_search: "https://www.gacetaoficialdebolivia.gob.bo/ediciones"
+    url_base: "http://www.gacetaoficialdebolivia.gob.bo"
+    url_search: "http://www.gacetaoficialdebolivia.gob.bo/normas/listadonor/10"
     prioridad: 1
     ola: 1
     activo: true
+    fuente_oficial: true
     metadatos:
       tipo_documentos:
         - "Ley"
@@ -149,10 +150,10 @@ sites:
       formato_principal: "PDF"
       requiere_ocr: true
     scraper:
-      tipo: "complex"  # Requiere lógica especial para ediciones
+      tipo: "static"
       paginacion: true
       items_por_pagina: 100
-      delay_entre_requests: 3
+      delay_entre_requests: 2
 
   att:
     id: att

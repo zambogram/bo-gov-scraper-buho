@@ -12,14 +12,22 @@ from .gaceta_scraper import GacetaScraper
 from .att_scraper import ATTScraper
 from .mintrabajo_scraper import MinTrabajoScraper
 
+# Importar scrapers avanzados (con Selenium)
+try:
+    from .advanced.gaceta_oficial_scraper import GacetaOficialScraper
+    ADVANCED_AVAILABLE = True
+except ImportError:
+    ADVANCED_AVAILABLE = False
+
 # Registro de scrapers disponibles
+# Prioridad a scrapers avanzados si están disponibles
 SCRAPERS = {
     'tcp': TCPScraper,
     'tsj': TSJScraper,
     'asfi': ASFIScraper,
     'sin': SINScraper,
     'contraloria': ContraloriaScraper,
-    'gaceta_oficial': GacetaScraper,
+    'gaceta_oficial': GacetaOficialScraper if ADVANCED_AVAILABLE else GacetaScraper,
     'att': ATTScraper,
     'mintrabajo': MinTrabajoScraper,
 }
