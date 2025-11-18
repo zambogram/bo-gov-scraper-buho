@@ -6,6 +6,7 @@ Comandos:
   - listar: Listar sitios disponibles
   - scrape: Ejecutar scraping de uno o todos los sitios
   - stats: Ver estadísticas globales
+  - sync-supabase: Sincronizar datos con Supabase
 """
 import argparse
 import sys
@@ -16,6 +17,7 @@ from datetime import datetime
 
 from config import list_active_sites, get_site_config
 from scraper import run_site_pipeline, run_all_sites_pipeline
+from sync import SupabaseSyncExtended
 
 # Configurar logging
 logging.basicConfig(
@@ -176,6 +178,78 @@ def cmd_stats(args):
     print()
 
 
+def cmd_sync_supabase(args):
+    """Sincronizar datos con Supabase"""
+    print("\n🔄 Sincronización con Supabase\n")
+    print("-" * 80)
+
+    try:
+        # Inicializar sincronizador
+        syncer = SupabaseSyncExtended(
+            exports_dir=Path("exports"),
+            normalized_dir=Path("data/normalized"),
+            log_dir=Path("logs/sync_supabase")
+        )
+
+        if args.all:
+            # Sincronizar todos los sitios
+            print("\n📋 Sincronizando TODOS los sitios...\n")
+            stats = syncer.sync_all_sites()
+
+            # Mostrar resumen
+            print(f"\n{'='*80}")
+            print("RESUMEN DE SINCRONIZACIÓN")
+            print(f"{'='*80}")
+            print(f"Sitios procesados: {stats['sitios_procesados']}")
+            print(f"Sitios exitosos: {stats['sitios_exitosos']}")
+            print(f"Sitios con errores: {stats['sitios_con_errores']}")
+            print()
+
+        else:
+            # Sincronizar sitio específico
+            site_id = args.site
+            print(f"\n📍 Sincronizando sitio: {site_id}\n")
+
+            stats = syncer.sync_site(site_id, args.session)
+
+            # Mostrar resultados
+            print(f"\n{'='*80}")
+            print(f"RESULTADOS - {site_id}")
+            print(f"{'='*80}")
+            print(f"Sources: {stats['sources_insertados']} insertados, {stats['sources_actualizados']} actualizados")
+            print(f"Documents: {stats['documents_insertados']} insertados, {stats['documents_actualizados']} actualizados")
+            print(f"Articles: {stats['articles_insertados']} insertados")
+            print(f"Errores: {len(stats['errores'])}")
+
+            if stats['errores']:
+                print(f"\n❌ Errores encontrados:")
+                for error in stats['errores'][:5]:  # Mostrar solo primeros 5
+                    print(f"   - {error.get('tipo')}: {error.get('mensaje')}")
+
+            print()
+
+        print("\n✅ Sincronización completada")
+        print(f"Ver logs en: logs/sync_supabase/")
+        print()
+
+    except ImportError:
+        print("\n❌ Error: Supabase no está instalado")
+        print("Instalar con: pip install supabase")
+        print()
+        sys.exit(1)
+    except ValueError as e:
+        print(f"\n❌ Error de configuración: {e}")
+        print("\nAsegúrate de tener configuradas las variables de entorno:")
+        print("  SUPABASE_URL=tu_url_de_supabase")
+        print("  SUPABASE_KEY=tu_clave_de_supabase")
+        print("\nPuedes agregarlas en un archivo .env")
+        print()
+        sys.exit(1)
+    except Exception as e:
+        logger.error(f"Error en sincronización: {e}", exc_info=True)
+        sys.exit(1)
+
+
 def main():
     """Función principal del CLI"""
 
@@ -228,6 +302,25 @@ def main():
     # Comando: stats
     parser_stats = subparsers.add_parser('stats', help='Ver estadísticas globales')
 
+    # Comando: sync-supabase
+    parser_sync = subparsers.add_parser('sync-supabase', help='Sincronizar con Supabase')
+    parser_sync.add_argument(
+        'site',
+        nargs='?',
+        help='ID del sitio a sincronizar (tcp, tsj, asfi, sin, contraloria)'
+    )
+    parser_sync.add_argument(
+        '--all',
+        action='store_true',
+        help='Sincronizar todos los sitios disponibles'
+    )
+    parser_sync.add_argument(
+        '--session',
+        type=str,
+        default=None,
+        help='Timestamp de sesión específica a sincronizar (formato: YYYYMMDD_HHMMSS)'
+    )
+
     # Parsear argumentos
     args = parser.parse_args()
 
@@ -238,6 +331,8 @@ def main():
         cmd_scrape(args)
     elif args.command == 'stats':
         cmd_stats(args)
+    elif args.command == 'sync-supabase':
+        cmd_sync_supabase(args)
     else:
         parser.print_help()
 

@@ -364,10 +364,41 @@ Para cada documento:
 
 ### Testing
 
+#### Tests Automatizados (pytest)
+
+El proyecto incluye tests completos para componentes clave:
+
+```bash
+# Instalar dependencias de testing
+pip install pytest pytest-cov
+
+# Ejecutar todos los tests
+pytest
+
+# Ejecutar con cobertura
+pytest --cov=scraper --cov-report=html
+
+# Ejecutar tests específicos
+pytest tests/test_metadata_extractor.py
+pytest tests/test_exporter.py
+pytest tests/test_models.py
+
+# Ver reporte de cobertura
+open htmlcov/index.html
+```
+
+**Tests Incluidos:**
+- `test_models.py`: Tests para modelos Documento y Articulo
+- `test_metadata_extractor.py`: Tests para extracción de metadata legal
+- `test_exporter.py`: Tests para exportación a CSV/JSONL
+
+#### Tests Manuales
+
 ```bash
 # Probar CLI
 python main.py listar
 python main.py scrape tcp --limit 1
+python main.py sync-supabase tcp
 
 # Probar UI
 streamlit run app/streamlit_app.py
@@ -401,16 +432,29 @@ Proyecto BÚHO - Sistema de información legal boliviano
 
 ## 🗺️ Roadmap
 
+### FASE 10 ✅ Completada
 - [x] Pipeline completo de scraping local
 - [x] Interfaz Streamlit con control total
 - [x] CLI robusto
 - [x] Sistema de delta updates
-- [ ] Scrapers reales para cada sitio
+- [x] Metadata extendida (áreas del derecho, jerarquía, estado vigencia)
+- [x] Exportación a CSV/JSONL en tiempo real
+- [x] Tracking histórico de progreso
+
+### FASE 11 ✅ Completada
+- [x] Sincronización extendida con Supabase
+- [x] Interfaz QA/Revisión en Streamlit
+- [x] Tests automatizados con pytest
+- [x] Scripts robustos con reintentos
+- [x] Configuración de exportaciones (YAML)
+
+### Próximas Fases
+- [ ] Scrapers reales para cada sitio (actualmente con datos de ejemplo)
 - [ ] Scraper de Gaceta Oficial
-- [ ] Sincronización con Supabase
-- [ ] API REST
-- [ ] Tests automatizados
+- [ ] API REST sobre Supabase
+- [ ] Búsqueda semántica con embeddings
 - [ ] Docker containerization
+- [ ] CI/CD con GitHub Actions
 
 ---
 

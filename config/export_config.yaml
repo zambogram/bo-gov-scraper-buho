@@ -1,0 +1,260 @@
+# Configuración de exportaciones para BO-GOV-SCRAPER-BUHO
+# Define qué y cómo se exportan los datos procesados
+
+# ==============================================================================
+# Directorios de exportación
+# ==============================================================================
+export:
+  base_dir: "exports"  # Directorio raíz para exportaciones
+  by_site: true        # Organizar por sitio (exports/tcp/, exports/tsj/, etc.)
+  by_timestamp: true   # Organizar por timestamp de sesión
+
+  # Formato de timestamp para subdirectorios
+  timestamp_format: "%Y%m%d_%H%M%S"  # Ejemplo: 20250118_143025
+
+# ==============================================================================
+# Formatos de exportación
+# ==============================================================================
+formats:
+  # CSV - Para análisis rápido en Excel/Pandas
+  csv:
+    enabled: true
+    documentos:
+      filename: "documentos.csv"
+      fields:
+        - id_documento
+        - site
+        - tipo_documento
+        - numero_norma
+        - fecha
+        - fecha_publicacion
+        - titulo
+        - area_principal
+        - areas_derecho
+        - jerarquia
+        - estado_vigencia
+        - entidad_emisora
+        - total_articulos
+        - ruta_pdf
+        - ruta_txt
+        - ruta_json
+        - hash_contenido
+        - fecha_scraping
+
+    articulos:
+      filename: "articulos.csv"
+      fields:
+        - id_articulo
+        - id_documento
+        - numero
+        - titulo
+        - tipo_unidad
+        - contenido_preview  # Solo preview (primeros 200 chars)
+
+  # JSONL - Para procesamiento incremental (una línea = un documento)
+  jsonl:
+    enabled: true
+    filename: "registro_historico.jsonl"
+    include_full_metadata: true
+    include_timestamp: true
+
+  # Excel - Para reportes ejecutivos
+  excel:
+    enabled: false  # Deshabilitado por defecto (requiere openpyxl)
+    filename: "reporte_completo.xlsx"
+    sheets:
+      - name: "Documentos"
+        source: "documentos"
+      - name: "Artículos"
+        source: "articulos"
+      - name: "Estadísticas"
+        source: "stats"
+
+  # JSON - Reporte resumen de sesión
+  json:
+    enabled: true
+    filename: "reporte_scraping.json"
+    include_stats: true
+    include_errors: true
+    include_file_paths: true
+
+# ==============================================================================
+# Metadata extendida
+# ==============================================================================
+metadata:
+  # Incluir metadata extendida en exportaciones
+  extended_metadata: true
+
+  # Campos de metadata extendida a incluir
+  fields:
+    - tipo_norma
+    - jerarquia
+    - area_principal
+    - areas_derecho
+    - estado_vigencia
+    - entidad_emisora
+    - palabras_clave
+    - modifica_normas
+    - deroga_normas
+    - fecha_promulgacion
+    - sumilla_generada
+    - estadisticas
+
+  # Clasificación automática
+  classification:
+    enabled: true
+    min_confidence: 0.0  # Mínima confianza (0-1) para aceptar clasificación
+
+# ==============================================================================
+# Tracking histórico
+# ==============================================================================
+tracking:
+  enabled: true
+  file: "data/tracking_historico.json"
+
+  # Qué rastrear
+  track_sessions: true
+  track_progress: true
+  track_metadata_summary: true
+
+  # Estadísticas agregadas
+  aggregate_stats:
+    - total_documentos
+    - total_articulos
+    - documentos_por_area
+    - documentos_por_jerarquia
+    - documentos_por_tipo
+
+# ==============================================================================
+# Opciones de rendimiento
+# ==============================================================================
+performance:
+  # Flush automático (escribir a disco inmediatamente)
+  auto_flush: true
+
+  # Buffer size para escritura (número de documentos)
+  buffer_size: 10
+
+  # Compresión
+  compression:
+    enabled: false  # Deshabilitado por defecto
+    format: "gzip"  # gzip, bzip2, xz
+    level: 6        # 1-9 (1=rápido, 9=máxima compresión)
+
+# ==============================================================================
+# Validación de datos
+# ==============================================================================
+validation:
+  # Validar datos antes de exportar
+  enabled: true
+
+  # Reglas de validación
+  rules:
+    - name: "documento_tiene_id"
+      field: "id_documento"
+      required: true
+
+    - name: "documento_tiene_tipo"
+      field: "tipo_documento"
+      required: true
+
+    - name: "hash_presente"
+      field: "hash_contenido"
+      required: true
+      warn_only: false  # Fallar si falta
+
+  # Qué hacer con documentos inválidos
+  on_invalid:
+    action: "skip"  # skip, warn, fail
+    log: true
+    log_file: "logs/validation_errors.log"
+
+# ==============================================================================
+# Limpieza automática
+# ==============================================================================
+cleanup:
+  # Limpiar exportaciones antiguas
+  enabled: false
+
+  # Retener solo las últimas N sesiones por sitio
+  keep_last_sessions: 10
+
+  # Edad máxima de exportaciones (días)
+  max_age_days: 90
+
+  # Qué limpiar
+  clean_csv: false
+  clean_json: false
+  clean_reports: true
+
+# ==============================================================================
+# Integración con sistemas externos
+# ==============================================================================
+integrations:
+  # Supabase
+  supabase:
+    enabled: false  # Se habilita via CLI con sync-supabase
+    auto_sync: false
+    sync_on_complete: false
+
+  # Webhook para notificaciones
+  webhook:
+    enabled: false
+    url: ""
+    method: "POST"
+    on_events:
+      - "scraping_complete"
+      - "export_complete"
+
+  # S3/Cloud Storage
+  cloud_storage:
+    enabled: false
+    provider: "s3"  # s3, gcs, azure
+    bucket: ""
+    path_prefix: "bo-gov-scraper/"
+
+# ==============================================================================
+# Logs de exportación
+# ==============================================================================
+logging:
+  enabled: true
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+  # Archivo de log
+  file: "logs/exports/export_{timestamp}.log"
+
+  # Formato
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  # Rotación de logs
+  rotation:
+    enabled: true
+    max_size_mb: 10
+    backup_count: 5
+
+# ==============================================================================
+# Configuración por sitio (overrides)
+# ==============================================================================
+site_overrides:
+  # Ejemplo: TCP puede tener configuración específica
+  tcp:
+    formats:
+      csv:
+        enabled: true
+      excel:
+        enabled: false
+
+  # Ejemplo: TSJ puede exportar a Excel
+  tsj:
+    formats:
+      excel:
+        enabled: false
+
+# ==============================================================================
+# Metadata de configuración
+# ==============================================================================
+config_metadata:
+  version: "1.0.0"
+  last_updated: "2025-01-18"
+  description: "Configuración de exportaciones para scraper legal boliviano"
+  author: "BÚHO Team"
