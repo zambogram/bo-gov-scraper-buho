@@ -1,1 +1,152 @@
+# ========== CORE DEPENDENCIES ==========
+# Web scraping
+requests==2.31.0
+beautifulsoup4==4.12.2
+lxml==4.9.3
+selenium==4.15.2
+webdriver-manager==4.0.1
 
+# Async scraping
+aiohttp==3.9.1
+asyncio==3.4.3
+
+# HTML parsing
+html5lib==1.1
+cssselect==1.2.0
+
+# ========== DOCUMENT PROCESSING ==========
+# PDF processing
+PyPDF2==3.0.1
+pdfplumber==0.10.3
+pypdf==3.17.1
+pdf2image==1.16.3
+reportlab==4.0.7
+
+# PDF splitting and merging
+PyMuPDF==1.23.8  # fitz
+
+# DOC/DOCX processing
+python-docx==1.1.0
+pypandoc==1.12
+
+# ========== OCR ==========
+# Tesseract OCR
+pytesseract==0.3.10
+Pillow==10.1.0
+
+# EasyOCR (alternativa más precisa)
+easyocr==1.7.1
+
+# Preprocessing de imágenes
+opencv-python==4.8.1.78
+numpy==1.24.3
+
+# ========== DATA PROCESSING ==========
+# Data manipulation
+pandas==2.1.4
+openpyxl==3.1.2  # Excel support
+
+# JSON processing
+jsonschema==4.20.0
+
+# YAML configuration
+PyYAML==6.0.1
+
+# ========== DATABASE ==========
+# SQLite (built-in to Python)
+# SQLAlchemy for ORM
+sqlalchemy==2.0.23
+
+# ========== TEXT PROCESSING ==========
+# Natural Language Processing
+nltk==3.8.1
+spacy==3.7.2
+
+# Text extraction and cleaning
+textract==1.6.5
+python-magic==0.4.27
+
+# Regex
+regex==2023.10.3
+
+# ========== METADATA ==========
+# Metadata extraction
+exifread==3.0.0
+
+# Hash generation
+hashlib  # Built-in
+
+# ========== WEB INTERFACE ==========
+# Streamlit
+streamlit==1.29.0
+streamlit-aggrid==0.3.4.post3
+
+# Plotting and visualization
+plotly==5.18.0
+matplotlib==3.8.2
+
+# ========== UTILITIES ==========
+# Progress bars
+tqdm==4.66.1
+
+# Logging
+colorlog==6.8.0
+
+# Date parsing
+python-dateutil==2.8.2
+
+# File handling
+pathlib  # Built-in
+shutil  # Built-in
+
+# HTTP utilities
+urllib3==2.1.0
+
+# ========== CONCURRENT PROCESSING ==========
+# Multiprocessing
+concurrent.futures  # Built-in
+multiprocessing  # Built-in
+
+# Threading
+threading  # Built-in
+
+# ========== ERROR HANDLING ==========
+# Retry logic
+tenacity==8.2.3
+
+# ========== EXPORT FORMATS ==========
+# CSV (built-in)
+# JSON (built-in)
+# Excel via openpyxl (already included)
+
+# XML export
+lxml  # Already included
+
+# ========== TESTING (Optional) ==========
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# ========== SECURITY ==========
+# SSL/TLS
+certifi==2023.11.17
+
+# ========== PERFORMANCE ==========
+# Caching
+diskcache==5.6.3
+
+# Memory profiling (optional)
+memory-profiler==0.61.0
+
+# ========== NOTIFICATIONS (Optional) ==========
+# Email notifications
+# smtplib  # Built-in
+
+# ========== ADDITIONAL TOOLS ==========
+# User agent rotation
+fake-useragent==1.4.0
+
+# Rate limiting
+ratelimit==2.2.1
+
+# File type detection
+filetype==1.2.0

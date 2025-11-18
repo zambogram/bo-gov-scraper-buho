@@ -1,0 +1,304 @@
+# Esquema de Metadatos para Documentos Legales Bolivianos
+# Define todos los campos de metadatos que se extraerán y almacenarán
+
+metadata_fields:
+  # ========== IDENTIFICACIÓN ==========
+  identification:
+    - field: "numero_ley"
+      type: "string"
+      required: true
+      description: "Número de la ley (ej: Ley 1178, DS 29894)"
+      regex_patterns:
+        - "Ley\\s+N°?\\s*(\\d+)"
+        - "Ley\\s+(\\d+)"
+        - "D\\.?S\\.?\\s+N°?\\s*(\\d+)"
+        - "Decreto Supremo\\s+N°?\\s*(\\d+)"
+        - "Resolución\\s+N°?\\s*(\\d+)"
+
+    - field: "tipo_norma"
+      type: "enum"
+      required: true
+      description: "Tipo de norma legal"
+      values:
+        - "Constitución"
+        - "Ley"
+        - "Decreto Supremo"
+        - "Decreto Ley"
+        - "Resolución Ministerial"
+        - "Resolución Administrativa"
+        - "Sentencia Constitucional"
+        - "Ordenanza Municipal"
+        - "Reglamento"
+        - "Código"
+        - "Otro"
+
+    - field: "titulo"
+      type: "text"
+      required: true
+      description: "Título completo de la norma"
+
+    - field: "codigo_unico"
+      type: "string"
+      required: true
+      description: "Código único generado (SHA256 del contenido)"
+
+  # ========== CLASIFICACIÓN JURÍDICA ==========
+  classification:
+    - field: "area_derecho"
+      type: "enum"
+      required: true
+      description: "Área del derecho a la que pertenece"
+      values:
+        - "Constitucional"
+        - "Administrativo"
+        - "Penal"
+        - "Civil"
+        - "Comercial"
+        - "Laboral"
+        - "Tributario"
+        - "Aduanero"
+        - "Ambiental"
+        - "Minero"
+        - "Agrario"
+        - "Hidrocarburos"
+        - "Energía Eléctrica"
+        - "Telecomunicaciones"
+        - "Transporte"
+        - "Salud"
+        - "Educación"
+        - "Seguridad Social"
+        - "Derechos Humanos"
+        - "Internacional"
+        - "Municipal"
+        - "Procesal"
+        - "Bancario-Financiero"
+        - "Defensa del Estado"
+        - "Obras Públicas"
+        - "Desarrollo Productivo"
+        - "Planificación"
+        - "General"
+
+    - field: "jerarquia_normativa"
+      type: "enum"
+      required: true
+      description: "Jerarquía en el sistema legal boliviano"
+      values:
+        - "Constitucional"
+        - "Legal"
+        - "Reglamentario"
+        - "Administrativo"
+        - "Municipal"
+
+    - field: "materia"
+      type: "array"
+      description: "Materias específicas que trata la norma"
+
+    - field: "palabras_clave"
+      type: "array"
+      description: "Palabras clave extraídas del contenido"
+
+  # ========== INFORMACIÓN TEMPORAL ==========
+  temporal:
+    - field: "fecha_promulgacion"
+      type: "date"
+      required: true
+      format: "YYYY-MM-DD"
+      description: "Fecha de promulgación"
+
+    - field: "fecha_publicacion"
+      type: "date"
+      format: "YYYY-MM-DD"
+      description: "Fecha de publicación en Gaceta Oficial"
+
+    - field: "fecha_vigencia"
+      type: "date"
+      format: "YYYY-MM-DD"
+      description: "Fecha de entrada en vigencia"
+
+    - field: "fecha_abrogacion"
+      type: "date"
+      format: "YYYY-MM-DD"
+      description: "Fecha de abrogación (si aplica)"
+
+    - field: "vigente"
+      type: "boolean"
+      required: true
+      description: "Si la norma está vigente actualmente"
+
+  # ========== ORIGEN Y FUENTE ==========
+  source:
+    - field: "organo_emisor"
+      type: "string"
+      required: true
+      description: "Órgano que emitió la norma"
+
+    - field: "firmante"
+      type: "string"
+      description: "Persona que firmó/promulgó la norma"
+
+    - field: "url_origen"
+      type: "url"
+      required: true
+      description: "URL de donde se obtuvo el documento"
+
+    - field: "sitio_web"
+      type: "string"
+      required: true
+      description: "Nombre del sitio web fuente"
+
+    - field: "fecha_scraping"
+      type: "datetime"
+      required: true
+      format: "YYYY-MM-DD HH:MM:SS"
+      description: "Fecha y hora del scraping"
+
+  # ========== DOCUMENTO ==========
+  document:
+    - field: "formato_original"
+      type: "enum"
+      required: true
+      values: ["PDF", "DOC", "DOCX", "HTML", "TXT", "IMAGE", "OTRO"]
+
+    - field: "tamanio_bytes"
+      type: "integer"
+      required: true
+      description: "Tamaño del archivo en bytes"
+
+    - field: "numero_paginas"
+      type: "integer"
+      description: "Número de páginas del documento"
+
+    - field: "hash_md5"
+      type: "string"
+      required: true
+      description: "Hash MD5 del archivo original"
+
+    - field: "hash_sha256"
+      type: "string"
+      required: true
+      description: "Hash SHA256 del archivo original"
+
+    - field: "ruta_archivo_original"
+      type: "path"
+      required: true
+      description: "Ruta al archivo original descargado"
+
+    - field: "ruta_archivo_procesado"
+      type: "path"
+      description: "Ruta al archivo procesado/normalizado"
+
+    - field: "archivos_divididos"
+      type: "array"
+      description: "Lista de rutas de archivos si se dividió"
+
+  # ========== PROCESAMIENTO ==========
+  processing:
+    - field: "ocr_aplicado"
+      type: "boolean"
+      required: true
+      description: "Si se aplicó OCR al documento"
+
+    - field: "confianza_ocr"
+      type: "float"
+      range: [0.0, 1.0]
+      description: "Nivel de confianza del OCR (0-1)"
+
+    - field: "idioma_detectado"
+      type: "string"
+      description: "Idioma del documento"
+
+    - field: "texto_extraido"
+      type: "text"
+      description: "Texto completo extraído del documento"
+
+    - field: "estado_procesamiento"
+      type: "enum"
+      required: true
+      values: ["pendiente", "procesando", "completado", "error"]
+
+    - field: "errores_procesamiento"
+      type: "array"
+      description: "Lista de errores encontrados durante el procesamiento"
+
+  # ========== RELACIONES ==========
+  relations:
+    - field: "modifica_a"
+      type: "array"
+      description: "Lista de leyes que esta norma modifica"
+
+    - field: "modificada_por"
+      type: "array"
+      description: "Lista de leyes que modifican esta norma"
+
+    - field: "deroga_a"
+      type: "array"
+      description: "Lista de leyes que esta norma deroga"
+
+    - field: "derogada_por"
+      type: "string"
+      description: "Ley que derogó esta norma"
+
+    - field: "reglamenta_a"
+      type: "string"
+      description: "Ley que esta norma reglamenta"
+
+    - field: "reglamentada_por"
+      type: "array"
+      description: "Lista de normas que reglamentan esta ley"
+
+  # ========== CONTENIDO ADICIONAL ==========
+  content:
+    - field: "resumen"
+      type: "text"
+      description: "Resumen generado del contenido"
+
+    - field: "articulos_principales"
+      type: "array"
+      description: "Lista de artículos principales extraídos"
+
+    - field: "disposiciones_transitorias"
+      type: "text"
+      description: "Disposiciones transitorias"
+
+    - field: "disposiciones_finales"
+      type: "text"
+      description: "Disposiciones finales"
+
+    - field: "anexos"
+      type: "array"
+      description: "Lista de anexos del documento"
+
+  # ========== ESTADÍSTICAS ==========
+  statistics:
+    - field: "total_articulos"
+      type: "integer"
+      description: "Número total de artículos"
+
+    - field: "total_palabras"
+      type: "integer"
+      description: "Total de palabras en el documento"
+
+    - field: "total_caracteres"
+      type: "integer"
+      description: "Total de caracteres"
+
+
+# Configuración de extracción automática
+extraction_config:
+  # Patrones regex para extracción automática
+  regex_patterns:
+    fecha:
+      - "(?P<day>\\d{1,2})\\s+de\\s+(?P<month>\\w+)\\s+de\\s+(?P<year>\\d{4})"
+      - "(?P<day>\\d{2})/(?P<month>\\d{2})/(?P<year>\\d{4})"
+
+    articulo:
+      - "Art[íi]culo\\s+(\\d+)[°º]?\\.?\\s*-?\\s*(.+?)(?=Art[íi]culo|$)"
+      - "ARTICULO\\s+(\\d+)[°º]?\\.?\\s*(.+?)(?=ARTICULO|$)"
+
+  # Campos que se intentarán extraer automáticamente del texto
+  auto_extract:
+    - "numero_ley"
+    - "fecha_promulgacion"
+    - "organo_emisor"
+    - "firmante"
+    - "tipo_norma"
