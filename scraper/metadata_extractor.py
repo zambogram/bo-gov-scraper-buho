@@ -376,3 +376,109 @@ class LegalMetadataExtractor:
 
         sumilla = ' '.join(lineas_significativas)
         return sumilla[:300] + '...' if len(sumilla) > 300 else sumilla
+
+    # ============================================================================
+    # MÉTODOS SITE-AWARE (METADATA ESPECÍFICA POR SITIO)
+    # ============================================================================
+
+    def extraer_metadata_sitio_especifico(
+        self,
+        site_id: str,
+        texto: str,
+        titulo: Optional[str] = None,
+        documento_base: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Extraer metadata específica según el sitio origen (SITE-AWARE)
+
+        Args:
+            site_id: ID del sitio (tcp, tsj, gaceta_oficial, asfi, sin, etc.)
+            texto: Texto completo del documento
+            titulo: Título del documento
+            documento_base: Metadata base del documento desde scraper
+
+        Returns:
+            Diccionario con metadata específica del sitio
+        """
+        texto_lower = (titulo or '' + texto[:3000]).lower()
+        metadata = {}
+
+        # TCP - Tribunal Constitucional
+        if site_id == 'tcp':
+            metadata['tribunal'] = 'TCP'
+            # Tipo de acción
+            if 'amparo' in texto_lower:
+                metadata['tipo_accion'] = 'Amparo Constitucional'
+            elif 'libertad' in texto_lower:
+                metadata['tipo_accion'] = 'Acción de Libertad'
+            elif 'inconstitucionalidad' in texto_lower:
+                metadata['tipo_accion'] = 'Inconstitucionalidad'
+            # Sala
+            if 'primera sala' in texto_lower:
+                metadata['sala'] = 'Primera Sala'
+            elif 'segunda sala' in texto_lower:
+                metadata['sala'] = 'Segunda Sala'
+
+        # TSJ - Tribunal Supremo
+        elif site_id == 'tsj':
+            metadata['tribunal'] = 'TSJ'
+            # Materia
+            if 'civil' in texto_lower:
+                metadata['materia'] = 'Civil'
+            elif 'penal' in texto_lower:
+                metadata['materia'] = 'Penal'
+            elif 'laboral' in texto_lower:
+                metadata['materia'] = 'Laboral'
+            # Tipo de recurso
+            if 'casación' in texto_lower or 'casacion' in texto_lower:
+                metadata['tipo_recurso'] = 'Casación'
+
+        # ASFI
+        elif site_id == 'asfi':
+            metadata['entidad_reguladora'] = 'ASFI'
+            if 'banco' in texto_lower:
+                metadata['tipo_entidad_regulada'] = 'Banco'
+            elif 'cooperativa' in texto_lower:
+                metadata['tipo_entidad_regulada'] = 'Cooperativa'
+
+        # SIN
+        elif site_id == 'sin':
+            metadata['entidad'] = 'SIN'
+            # Tipo de tributo
+            if 'iva' in texto_lower:
+                metadata['tipo_tributo'] = 'IVA'
+            elif 'iue' in texto_lower:
+                metadata['tipo_tributo'] = 'IUE'
+            elif 'it' in texto_lower and 'impuesto' in texto_lower:
+                metadata['tipo_tributo'] = 'IT'
+
+        # Contraloría
+        elif site_id == 'contraloria':
+            metadata['entidad'] = 'CGE'
+            if 'auditoría' in texto_lower or 'auditoria' in texto_lower:
+                metadata['tipo_auditoria'] = 'Auditoría'
+
+        # Gaceta
+        elif site_id == 'gaceta_oficial':
+            metadata['fuente'] = 'Gaceta Oficial'
+            if documento_base and 'metadata_extra' in documento_base:
+                if 'edicion_gaceta' in documento_base['metadata_extra']:
+                    metadata['edicion_gaceta'] = documento_base['metadata_extra']['edicion_gaceta']
+
+        # ATT
+        elif site_id == 'att':
+            metadata['entidad'] = 'ATT'
+            if 'telecomunicaciones' in texto_lower:
+                metadata['sector'] = 'Telecomunicaciones'
+            elif 'transporte' in texto_lower:
+                metadata['sector'] = 'Transportes'
+
+        # MinTrabajo
+        elif site_id == 'mintrabajo':
+            metadata['ministerio'] = 'Ministerio de Trabajo'
+            if 'salario' in texto_lower:
+                metadata['ambito'] = 'Salarios'
+            elif 'despido' in texto_lower:
+                metadata['ambito'] = 'Relaciones Laborales'
+
+        return metadata

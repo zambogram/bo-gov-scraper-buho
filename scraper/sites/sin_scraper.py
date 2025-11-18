@@ -1,209 +1,90 @@
-"""
-Scraper para SIN (Servicio de Impuestos Nacionales)
-
-NOTA: Este scraper utiliza datos de ejemplo para demostración.
-Para implementación real, reemplazar con requests HTTP reales al sitio del SIN.
-
-Estructura esperada del sitio real:
-- URL base: https://www.impuestos.gob.bo
-- Búsqueda: /normativa/resoluciones
-- Paginación: parámetros de query string
-- PDFs: /normativa/{año}/rnd-{numero}-{año}.pdf
-"""
+"""Scraper SIN - SCRAPING REAL de resoluciones normativas tributarias"""
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 import logging
-from datetime import datetime, timedelta
-
+from datetime import datetime
+import re
+import requests
+from bs4 import BeautifulSoup
 from .base_scraper import BaseScraper
 
 logger = logging.getLogger(__name__)
 
-
 class SINScraper(BaseScraper):
-    """
-    Scraper para SIN con soporte para scraping histórico completo
-
-    Implementación actual: Datos de ejemplo
-    TODO: Implementar scraping real con requests al sitio web
-    """
-
     def __init__(self):
         super().__init__('sin')
         logger.info(f"Inicializado scraper para {self.config.nombre}")
 
-    def listar_documentos(
-        self,
-        limite: Optional[int] = None,
-        modo: str = "delta",
-        pagina: int = 1
-    ) -> List[Dict[str, Any]]:
-        """
-        Listar resoluciones normativas del SIN
-
-        Args:
-            limite: Número máximo de documentos
-            modo: 'full' o 'delta'
-            pagina: Número de página (para paginación)
-
-        Returns:
-            Lista de metadata de documentos
-        """
+    def listar_documentos(self, limite: Optional[int] = None, modo: str = "delta", pagina: int = 1) -> List[Dict[str, Any]]:
         logger.info(f"Listando documentos de {self.site_id} - modo: {modo}, página: {pagina}")
+        try:
+            docs = self._scrape_real(pagina, limite)
+            if docs:
+                logger.info(f"✓ Scraping REAL: {len(docs)} resoluciones SIN")
+                return docs
+        except Exception as e:
+            logger.warning(f"⚠ Scraping falló: {e}")
+        logger.error("✗ No se pudo obtener datos del SIN")
+        return []
 
-        # =====================================================================
-        # IMPLEMENTACIÓN CON DATOS DE EJEMPLO
-        # =====================================================================
-        # En producción, aquí iría:
-        # 1. Construir URL con paginación: f"{self.config.url_search}?page={pagina}"
-        # 2. Hacer request HTTP: response = self.session.get(url)
-        # 3. Parsear HTML con BeautifulSoup: soup = BeautifulSoup(response.text)
-        # 4. Extraer datos de cada resolución: titulo, número, fecha, URL PDF
-        # 5. Retornar lista de diccionarios con metadata
-        # =====================================================================
+    def _scrape_real(self, pagina: int, limite: Optional[int]) -> List[Dict[str, Any]]:
+        docs = []
+        urls = [f"{self.config.url_search}?page={pagina}", f"{self.config.url_base}/normativa?pagina={pagina}"]
+        for url in urls:
+            try:
+                response = self.session.get(url, timeout=30)
+                response.raise_for_status()
+                soup = BeautifulSoup(response.content, 'html.parser')
+                for enlace in soup.find_all('a', href=lambda x: x and '.pdf' in str(x).lower())[:limite or 100]:
+                    doc = self._extraer_doc(enlace)
+                    if doc:
+                        docs.append(doc)
+                if docs:
+                    break
+            except:
+                continue
+        return docs[:limite] if limite else docs
 
-        # Generar datos de ejemplo por página
-        documentos_por_pagina = self.items_por_pagina
-
-        # Simular que tenemos 120 documentos totales divididos en páginas
-        total_documentos = 120
-        max_paginas = (total_documentos + documentos_por_pagina - 1) // documentos_por_pagina
-
-        # Si la página solicitada excede el máximo, retornar vacío
-        if pagina > max_paginas:
-            logger.info(f"Página {pagina} excede máximo ({max_paginas}), retornando vacío")
-            return []
-
-        # Calcular índices para esta página
-        inicio = (pagina - 1) * documentos_por_pagina
-        fin = min(inicio + documentos_por_pagina, total_documentos)
-
-        documentos_pagina = []
-
-        # Generar documentos de ejemplo para esta página
-        for i in range(inicio, fin):
-            # Número de RND (Resolución Normativa de Directorio)
-            numero_rnd = f"{102400000010 + i}"
-            fecha = datetime(2024, 1, 1) + timedelta(days=i*2)
-
-            # Temas tributarios
-            temas = [
-                'IVA - Impuesto al Valor Agregado',
-                'IT - Impuesto a las Transacciones',
-                'IUE - Impuesto sobre las Utilidades de las Empresas',
-                'RC-IVA - Régimen Complementario al IVA',
-                'ICE - Impuesto a los Consumos Específicos',
-                'IEHD - Impuesto Especial a los Hidrocarburos',
-                'ITF - Impuesto a las Transacciones Financieras',
-                'Régimen Simplificado',
-                'Facturación electrónica',
-                'Declaraciones juradas'
-            ]
-            tema = temas[i % len(temas)]
-
-            doc = {
-                'id_documento': f'sin_rn_{i+1:04d}_2024',
-                'tipo_documento': 'Resolución Normativa de Directorio',
-                'numero_norma': numero_rnd,
-                'fecha': fecha.strftime('%Y-%m-%d'),
-                'titulo': f'Resolución Normativa de Directorio {numero_rnd}',
-                'url': f'{self.config.url_base}/normativa/rnd-{i+1:04d}-2024.pdf',
-                'sumilla': self._generar_sumilla_ejemplo(i, tema)
-            }
-
-            documentos_pagina.append(doc)
-
-        # Aplicar límite si se especifica
-        if limite:
-            documentos_pagina = documentos_pagina[:limite]
-
-        logger.info(f"✓ Página {pagina}: {len(documentos_pagina)} documentos")
-
-        return documentos_pagina
-
-    def _generar_sumilla_ejemplo(self, idx: int, tema: str) -> str:
-        """Generar sumilla de ejemplo variada según tema tributario"""
-        sumillas_base = [
-            f'Normativa sobre {tema} - actualización de procedimientos',
-            f'Modificación de plazos y obligaciones para {tema}',
-            f'Nuevas disposiciones aplicables a {tema}',
-            f'Reglamentación específica sobre {tema}',
-            f'Directrices para la aplicación de {tema}'
-        ]
-        return sumillas_base[idx % len(sumillas_base)]
+    def _extraer_doc(self, enlace) -> Optional[Dict[str, Any]]:
+        href = enlace.get('href', '')
+        texto = enlace.get_text(strip=True)
+        if not href:
+            return None
+        url_pdf = href if href.startswith('http') else f"{self.config.url_base}{href}" if href.startswith('/') else f"{self.config.url_base}/{href}"
+        numero = None
+        match = re.search(r'RND\s*(\d+/\d{4})|(\d+/\d{4})', texto + href, re.IGNORECASE)
+        if match:
+            numero = match.group(1) or match.group(2)
+        año = datetime.now().year
+        match_año = re.search(r'(20\d{2})', texto + href)
+        if match_año:
+            año = int(match_año.group(1))
+        tipo = 'Resolución Normativa de Directorio'
+        if 'administrativa' in texto.lower():
+            tipo = 'Resolución Administrativa'
+        id_doc = f"sin_rnd_{numero.replace('/', '_') if numero else hash(url_pdf) % 100000}"
+        return {
+            'id_documento': id_doc,
+            'tipo_documento': tipo,
+            'numero_norma': numero or 'S/N',
+            'anio': año,
+            'fecha': f"{año}-01-01",
+            'titulo': texto[:200] if texto else f"{tipo} SIN {numero}",
+            'url': url_pdf,
+            'sumilla': f"{tipo} - Normativa tributaria",
+            'metadata_extra': {'entidad': 'SIN', 'area': 'tributario', 'metodo_scraping': 'real'}
+        }
 
     def descargar_pdf(self, url: str, ruta_destino: Path) -> bool:
-        """
-        Descargar PDF del SIN
-
-        Args:
-            url: URL del PDF
-            ruta_destino: Ruta donde guardar
-
-        Returns:
-            True si se descargó correctamente
-        """
-        logger.info(f"Descargando PDF: {url}")
-
-        # =====================================================================
-        # IMPLEMENTACIÓN CON DATOS DE EJEMPLO
-        # =====================================================================
-        # En producción, descomentar y usar:
-        # return self._download_file(url, ruta_destino)
-        # =====================================================================
-
-        # Por ahora, crear un PDF de prueba vacío
-        logger.warning("MODO DEMO: Creando PDF de prueba vacío")
-
         try:
+            response = self.session.get(url, timeout=60, stream=True)
+            response.raise_for_status()
             ruta_destino.parent.mkdir(parents=True, exist_ok=True)
-
-            # Crear PDF de prueba con reportlab
-            try:
-                from reportlab.pdfgen import canvas
-                from reportlab.lib.pagesizes import letter
-                from io import BytesIO
-
-                buffer = BytesIO()
-                c = canvas.Canvas(buffer, pagesize=letter)
-                c.drawString(100, 750, "SERVICIO DE IMPUESTOS NACIONALES")
-                c.drawString(100, 730, "RESOLUCIÓN NORMATIVA DE DIRECTORIO")
-                c.drawString(100, 700, f"Fuente: {url}")
-                c.drawString(100, 650, "Este es un PDF de ejemplo generado para demostración.")
-                c.drawString(100, 630, "En producción, aquí iría el contenido real descargado del sitio.")
-
-                # Añadir estructura típica de RND
-                y = 580
-                c.drawString(100, y, "VISTOS Y CONSIDERANDO:")
-                y -= 30
-                c.drawString(120, y, "Que es necesario establecer procedimientos...")
-                y -= 50
-                c.drawString(100, y, "POR TANTO:")
-                y -= 30
-                c.drawString(100, y, "El Directorio del SIN, en uso de sus facultades,")
-                y -= 30
-                c.drawString(100, y, "RESUELVE:")
-                y -= 40
-                for i in range(1, 6):
-                    c.drawString(120, y, f"Artículo {i}.- Disposición normativa {i}...")
-                    y -= 30
-
-                c.save()
-
-                # Guardar el PDF
-                buffer.seek(0)
-                with open(ruta_destino, 'wb') as f:
-                    f.write(buffer.getvalue())
-
-                logger.info(f"✓ PDF de prueba creado: {ruta_destino.name}")
-                return True
-
-            except ImportError:
-                # Si no está reportlab, crear archivo vacío
-                logger.warning("reportlab no disponible, creando archivo vacío")
-                ruta_destino.touch()
-                return True
-
+            with open(ruta_destino, 'wb') as f:
+                for chunk in response.iter_content(8192):
+                    if chunk:
+                        f.write(chunk)
+            return ruta_destino.stat().st_size > 0
         except Exception as e:
-            logger.error(f"✗ Error creando PDF de prueba: {e}")
+            logger.error(f"✗ Error: {e}")
             return False

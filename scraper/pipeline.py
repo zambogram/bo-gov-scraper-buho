@@ -272,6 +272,15 @@ def run_site_pipeline(
                     # Agregar metadata al documento
                     documento.metadata.update(metadata_ext)
 
+                    # Extraer metadata SITE-AWARE específica del sitio
+                    metadata_sitio = metadata_extractor.extraer_metadata_sitio_especifico(
+                        site_id=site_id,
+                        texto=texto,
+                        titulo=documento.titulo,
+                        documento_base=documento.metadata
+                    )
+                    documento.metadata.update(metadata_sitio)
+
                     # Tracking para reporte
                     if metadata_ext.get('area_principal'):
                         metadata_agregada['areas'].append(metadata_ext['area_principal'])
