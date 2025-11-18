@@ -1,0 +1,25 @@
+﻿numero,titulo,contenido,id_documento,tipo_norma,fecha_publicacion
+1,OBJETO,El presente documento establece las normas y procedimientos relativos a la materia en cuestión.,GOB_00001,Ley,01/11/2025
+2,ÁMBITO DE APLICACIÓN,Las disposiciones contenidas en el presente documento son de aplicación obligatoria en todo el territorio nacional.,GOB_00001,Ley,01/11/2025
+3,DEFINICIONES,"Para efectos del presente documento se establecen las siguientes definiciones:
+a) Término 1: Definición del término 1
+b) Término 2: Definición del término 2
+c) Término 3: Definición del término 3",GOB_00001,Ley,01/11/2025
+4,DISPOSICIONES GENERALES,Se establecen las siguientes disposiciones generales para la implementación efectiva del presente documento.,GOB_00001,Ley,01/11/2025
+5,VIGENCIA,El presente documento entra en vigencia a partir de su publicación en la Gaceta Oficial.,GOB_00001,Ley,01/11/2025
+1,OBJETO,El presente documento establece las normas y procedimientos relativos a la materia en cuestión.,GOB_00002,Decreto Supremo,02/11/2025
+2,ÁMBITO DE APLICACIÓN,Las disposiciones contenidas en el presente documento son de aplicación obligatoria en todo el territorio nacional.,GOB_00002,Decreto Supremo,02/11/2025
+3,DEFINICIONES,"Para efectos del presente documento se establecen las siguientes definiciones:
+a) Término 1: Definición del término 1
+b) Término 2: Definición del término 2
+c) Término 3: Definición del término 3",GOB_00002,Decreto Supremo,02/11/2025
+4,DISPOSICIONES GENERALES,Se establecen las siguientes disposiciones generales para la implementación efectiva del presente documento.,GOB_00002,Decreto Supremo,02/11/2025
+5,VIGENCIA,El presente documento entra en vigencia a partir de su publicación en la Gaceta Oficial.,GOB_00002,Decreto Supremo,02/11/2025
+1,OBJETO,El presente documento establece las normas y procedimientos relativos a la materia en cuestión.,GOB_00003,Resolución Ministerial,03/11/2025
+2,ÁMBITO DE APLICACIÓN,Las disposiciones contenidas en el presente documento son de aplicación obligatoria en todo el territorio nacional.,GOB_00003,Resolución Ministerial,03/11/2025
+3,DEFINICIONES,"Para efectos del presente documento se establecen las siguientes definiciones:
+a) Término 1: Definición del término 1
+b) Término 2: Definición del término 2
+c) Término 3: Definición del término 3",GOB_00003,Resolución Ministerial,03/11/2025
+4,DISPOSICIONES GENERALES,Se establecen las siguientes disposiciones generales para la implementación efectiva del presente documento.,GOB_00003,Resolución Ministerial,03/11/2025
+5,VIGENCIA,El presente documento entra en vigencia a partir de su publicación en la Gaceta Oficial.,GOB_00003,Resolución Ministerial,03/11/2025

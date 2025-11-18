@@ -1,0 +1,4 @@
+﻿id_documento,titulo,fecha_publicacion,numero_gaceta,tipo_norma,url_pdf,estado,fecha_scraping,observaciones,pdf_filepath,pdf_size,download_status,download_error,num_articulos,texto_path
+GOB_00001,Documento Ejemplo 1 - Ley,01/11/2025,1500,Ley,https://ejemplo.gob.bo/doc_1.pdf,ejemplo,2025-11-18 05:19:11,Documento de ejemplo - sitio no disponible,data/pdfs/GOB_00001.pdf,30,ejemplo,,5,data/parsed/GOB_00001.txt
+GOB_00002,Documento Ejemplo 2 - Decreto Supremo,02/11/2025,1501,Decreto Supremo,https://ejemplo.gob.bo/doc_2.pdf,ejemplo,2025-11-18 05:19:11,Documento de ejemplo - sitio no disponible,data/pdfs/GOB_00002.pdf,30,ejemplo,,5,data/parsed/GOB_00002.txt
+GOB_00003,Documento Ejemplo 3 - Resolución Ministerial,03/11/2025,1502,Resolución Ministerial,https://ejemplo.gob.bo/doc_3.pdf,ejemplo,2025-11-18 05:19:11,Documento de ejemplo - sitio no disponible,data/pdfs/GOB_00003.pdf,30,ejemplo,,5,data/parsed/GOB_00003.txt

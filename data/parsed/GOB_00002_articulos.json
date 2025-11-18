@@ -1,0 +1,42 @@
+[
+  {
+    "numero": 1,
+    "titulo": "OBJETO",
+    "contenido": "El presente documento establece las normas y procedimientos relativos a la materia en cuestión.",
+    "id_documento": "GOB_00002",
+    "tipo_norma": "Decreto Supremo",
+    "fecha_publicacion": "02/11/2025"
+  },
+  {
+    "numero": 2,
+    "titulo": "ÁMBITO DE APLICACIÓN",
+    "contenido": "Las disposiciones contenidas en el presente documento son de aplicación obligatoria en todo el territorio nacional.",
+    "id_documento": "GOB_00002",
+    "tipo_norma": "Decreto Supremo",
+    "fecha_publicacion": "02/11/2025"
+  },
+  {
+    "numero": 3,
+    "titulo": "DEFINICIONES",
+    "contenido": "Para efectos del presente documento se establecen las siguientes definiciones:\na) Término 1: Definición del término 1\nb) Término 2: Definición del término 2\nc) Término 3: Definición del término 3",
+    "id_documento": "GOB_00002",
+    "tipo_norma": "Decreto Supremo",
+    "fecha_publicacion": "02/11/2025"
+  },
+  {
+    "numero": 4,
+    "titulo": "DISPOSICIONES GENERALES",
+    "contenido": "Se establecen las siguientes disposiciones generales para la implementación efectiva del presente documento.",
+    "id_documento": "GOB_00002",
+    "tipo_norma": "Decreto Supremo",
+    "fecha_publicacion": "02/11/2025"
+  },
+  {
+    "numero": 5,
+    "titulo": "VIGENCIA",
+    "contenido": "El presente documento entra en vigencia a partir de su publicación en la Gaceta Oficial.",
+    "id_documento": "GOB_00002",
+    "tipo_norma": "Decreto Supremo",
+    "fecha_publicacion": "02/11/2025"
+  }
+]
