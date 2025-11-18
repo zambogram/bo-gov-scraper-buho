@@ -1,0 +1,595 @@
+# ========================================
+# CATÁLOGO DE FUENTES ESTATALES BOLIVIANAS
+# Sistema BÚHO - Motor Multi-sitio de Scraping Jurídico
+# ========================================
+#
+# Este archivo es la "fuente de verdad" de todos los sitios estatales
+# bolivianos que el sistema puede scrapear.
+#
+# Campos:
+#   site_id: identificador único (sin espacios, snake_case)
+#   nombre: nombre completo legible
+#   nivel: nacional | departamental | municipal
+#   tipo_fuente: normativa | jurisprudencia | regulador | registro
+#   prioridad: 1 (crítico MVP) | 2 (importante) | 3 (complementario)
+#   estado_scraper: pendiente | en_progreso | implementado | deshabilitado
+#   url_base: URL principal del sitio
+#   url_busqueda: URL del buscador (si aplica)
+#   url_listado: URL de listado de documentos (si aplica)
+#   formato_documento: pdf | html | mixto
+#   requiere_selenium: true | false
+#   requiere_login: true | false
+#   tiene_api: true | false
+#   estructura_texto: tipo de segmentación legal (articulos, sentencia, etc.)
+#   tipos_documentos: lista de tipos de documentos que publica
+#   frecuencia_actualizacion: diaria | semanal | mensual
+#   ultima_actualizacion: timestamp (se actualiza automáticamente)
+#   documentos_totales: contador (se actualiza automáticamente)
+#   articulos_totales: contador (se actualiza automáticamente)
+#   notas: observaciones técnicas
+#
+
+version: "1.0.0"
+actualizado: "2025-01-18"
+
+sites:
+
+  # ========================================
+  # OLA 1: NORMATIVA NACIONAL (Prioridad Crítica)
+  # ========================================
+
+  - site_id: "gaceta_oficial"
+    nombre: "Gaceta Oficial del Estado Plurinacional de Bolivia"
+    nivel: "nacional"
+    tipo_fuente: "normativa"
+    prioridad: 1
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "http://www.gacetaoficialdebolivia.gob.bo"
+    url_busqueda: "http://www.gacetaoficialdebolivia.gob.bo/normas/buscar"
+    url_listado: "http://www.gacetaoficialdebolivia.gob.bo/normas/listadonor/10"
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: true
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "ley"
+      - "decreto_supremo"
+      - "resolucion_suprema"
+      - "resolucion_ministerial"
+      - "resolucion_bi_ministerial"
+
+    # Metadatos
+    frecuencia_actualizacion: "diaria"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Fuente oficial PRIMARIA de normativa nacional - crítico para MVP. Publicación oficial de todas las normas del Estado."
+
+
+  # ========================================
+  # OLA 1: JURISPRUDENCIA NACIONAL (Prioridad Crítica)
+  # ========================================
+
+  - site_id: "tsj_genesis"
+    nombre: "Tribunal Supremo de Justicia - Sistema GENESIS"
+    nivel: "nacional"
+    tipo_fuente: "jurisprudencia"
+    prioridad: 1
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://jurisprudencia.tsj.bo"
+    url_busqueda: "https://jurisprudencia.tsj.bo/jurisprudencia"
+    url_listado: "https://jurisprudencia.tsj.bo/jurisprudencia/arbol"
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: true
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "sentencia_vistos_fundamentos_por_tanto"
+    tipos_documentos:
+      - "auto_supremo"
+      - "sentencia"
+      - "resolucion"
+
+    # Metadatos
+    frecuencia_actualizacion: "diaria"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Sistema GENESIS - Autos Supremos y Sentencias. Máxima instancia judicial ordinaria. Navegación por árbol temático disponible."
+
+
+  - site_id: "tcp"
+    nombre: "Tribunal Constitucional Plurinacional"
+    nivel: "nacional"
+    tipo_fuente: "jurisprudencia"
+    prioridad: 1
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://tcpbolivia.bo"
+    url_busqueda: "https://buscador.tcpbolivia.bo/_buscador/WfrExpedientes1.aspx"
+    url_listado: "https://jurisprudencia.tcpbolivia.bo"
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: true
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "sentencia_constitucional"
+    tipos_documentos:
+      - "sentencia_constitucional"
+      - "declaracion_constitucional"
+      - "resolucion"
+
+    # Metadatos
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Jurisprudencia constitucional - precedentes vinculantes. Doble buscador: causas/resoluciones y jurisprudencia temática."
+
+
+  # ========================================
+  # OLA 1: REGULADORES CLAVE (Prioridad Crítica)
+  # ========================================
+
+  - site_id: "asfi"
+    nombre: "Autoridad de Supervisión del Sistema Financiero"
+    nivel: "nacional"
+    tipo_fuente: "regulador"
+    prioridad: 1
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://www.asfi.gob.bo"
+    url_busqueda: "https://www.asfi.gob.bo/index.php/norm-serv-fina-norm.html"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "resolucion"
+      - "circular"
+      - "reglamento"
+      - "compendio_normativo"
+
+    # Metadatos
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Regulación del sistema financiero. Incluye reglamentos de Fintech (2025). Crítico para LegalTech financiero."
+
+
+  - site_id: "sin"
+    nombre: "Servicio de Impuestos Nacionales"
+    nivel: "nacional"
+    tipo_fuente: "regulador"
+    prioridad: 1
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://www.impuestos.gob.bo"
+    url_busqueda: "https://www.impuestos.gob.bo/normativa"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "resolucion_normativa"
+      - "resolucion_administrativa"
+      - "circular"
+
+    # Metadatos
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Normativa tributaria. Resoluciones del Directorio del SIN. Alta demanda para consultoría fiscal."
+
+
+  - site_id: "contraloria"
+    nombre: "Contraloría General del Estado Plurinacional"
+    nivel: "nacional"
+    tipo_fuente: "regulador"
+    prioridad: 2
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://www.contraloria.gob.bo"
+    url_busqueda: "https://www.contraloria.gob.bo/biblioteca-normativa"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "resolucion"
+      - "reglamento"
+      - "manual"
+      - "instructivo"
+
+    # Metadatos
+    frecuencia_actualizacion: "mensual"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Control fiscal y auditoría gubernamental. Biblioteca normativa organizada por categorías."
+
+
+  # ========================================
+  # OLA 2: NORMATIVA COMPLEMENTARIA
+  # ========================================
+
+  - site_id: "silep"
+    nombre: "Sistema de Información Legal del Estado Plurinacional"
+    nivel: "nacional"
+    tipo_fuente: "normativa"
+    prioridad: 2
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "http://www.silep.gob.bo"
+    url_busqueda: "http://www.silep.gob.bo/silep/inicio"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "html"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "ley"
+      - "decreto_supremo"
+      - "resolucion"
+
+    # Metadatos
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Base de datos legislativa desde 1825. No es fuente oficial (Gaceta lo es), pero útil para normalización y abrogaciones."
+
+
+  - site_id: "lexivox"
+    nombre: "Lexivox - Compendio Normativo Boliviano"
+    nivel: "nacional"
+    tipo_fuente: "normativa"
+    prioridad: 3
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://www.lexivox.org"
+    url_busqueda: "https://www.lexivox.org/norms/"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "html"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "ley"
+      - "decreto_supremo"
+      - "resolucion"
+
+    # Metadatos
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Compendio NO oficial pero muy útil. Buena estructuración HTML. Complementario para validación cruzada."
+
+
+  # ========================================
+  # OLA 2: TRIBUNALES ADMINISTRATIVOS
+  # ========================================
+
+  - site_id: "ait"
+    nombre: "Autoridad de Impugnación Tributaria"
+    nivel: "nacional"
+    tipo_fuente: "jurisprudencia"
+    prioridad: 2
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://www.ait.gob.bo"
+    url_busqueda: "https://sidot.ait.gob.bo"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: true
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "resolucion_administrativa"
+    tipos_documentos:
+      - "resolucion_recurso_alzada"
+      - "resolucion_recurso_jerarquico"
+
+    # Metadatos
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Sistema SiDoT - resoluciones de impugnación tributaria. Jurisprudencia administrativa en materia fiscal."
+
+
+  # ========================================
+  # OLA 2-3: OTROS REGULADORES NACIONALES
+  # ========================================
+
+  - site_id: "aps"
+    nombre: "Autoridad de Fiscalización y Control de Pensiones y Seguros"
+    nivel: "nacional"
+    tipo_fuente: "regulador"
+    prioridad: 2
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://www.aps.gob.bo"
+    url_busqueda: "https://www.aps.gob.bo/index.php/pensiones/normativa"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "resolucion_administrativa"
+      - "circular"
+      - "reglamento"
+
+    # Metadatos
+    frecuencia_actualizacion: "mensual"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Regulación de pensiones y seguros. Normativa del Sistema Integral de Pensiones (SIP)."
+
+
+  - site_id: "att"
+    nombre: "Autoridad de Regulación y Fiscalización de Telecomunicaciones y Transportes"
+    nivel: "nacional"
+    tipo_fuente: "regulador"
+    prioridad: 2
+    estado_scraper: "pendiente"
+
+    # URLs
+    url_base: "https://www.att.gob.bo"
+    url_busqueda: "https://www.att.gob.bo/en/reglamento"
+    url_listado: null
+
+    # Características técnicas
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    # Estructura legal
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "resolucion_administrativa"
+      - "reglamento"
+
+    # Metadatos
+    frecuencia_actualizacion: "mensual"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Regulación de telecomunicaciones y transportes. Reglamentos técnicos y administrativos."
+
+
+  # ========================================
+  # OLA 3: REGULADORES COMPLEMENTARIOS
+  # (Agregar según necesidad: ANH, AETN, ABT, AAPS, AJ, etc.)
+  # ========================================
+
+  - site_id: "anb"
+    nombre: "Aduana Nacional de Bolivia"
+    nivel: "nacional"
+    tipo_fuente: "regulador"
+    prioridad: 3
+    estado_scraper: "pendiente"
+
+    url_base: "https://www.aduana.gob.bo"
+    url_busqueda: null
+    url_listado: null
+
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "resolucion_administrativa"
+      - "instructivo"
+
+    frecuencia_actualizacion: "mensual"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Normativa aduanera. Complementario - implementar según demanda."
+
+
+  # ========================================
+  # OLA FUTURA: NIVEL DEPARTAMENTAL
+  # ========================================
+
+  - site_id: "gaceta_lapaz"
+    nombre: "Gaceta Oficial del Gobierno Autónomo Departamental de La Paz"
+    nivel: "departamental"
+    tipo_fuente: "normativa"
+    prioridad: 3
+    estado_scraper: "pendiente"
+
+    url_base: "https://www.gobernacionlapaz.gob.bo/gaceta"
+    url_busqueda: null
+    url_listado: null
+
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "ley_departamental"
+      - "decreto_departamental"
+      - "resolucion"
+
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Normativa departamental La Paz. Replicar para otros 8 departamentos en futuras olas."
+
+
+  - site_id: "gaceta_santacruz"
+    nombre: "Gaceta Oficial del Gobierno Autónomo Departamental de Santa Cruz"
+    nivel: "departamental"
+    tipo_fuente: "normativa"
+    prioridad: 3
+    estado_scraper: "pendiente"
+
+    url_base: "https://www.santacruz.gob.bo"
+    url_busqueda: null
+    url_listado: null
+
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "ley_departamental"
+      - "decreto_departamental"
+
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Normativa departamental Santa Cruz. URL por confirmar."
+
+
+  # ========================================
+  # OLA FUTURA: NIVEL MUNICIPAL
+  # ========================================
+
+  - site_id: "gamlp"
+    nombre: "Gobierno Autónomo Municipal de La Paz - GAMLP"
+    nivel: "municipal"
+    tipo_fuente: "normativa"
+    prioridad: 3
+    estado_scraper: "pendiente"
+
+    url_base: "https://www.lapaz.bo"
+    url_busqueda: null
+    url_listado: null
+
+    formato_documento: "pdf"
+    requiere_selenium: false
+    requiere_login: false
+    tiene_api: false
+
+    estructura_texto: "articulos"
+    tipos_documentos:
+      - "ley_municipal"
+      - "decreto_municipal"
+      - "ordenanza"
+
+    frecuencia_actualizacion: "semanal"
+    ultima_actualizacion: null
+    documentos_totales: 0
+    articulos_totales: 0
+
+    notas: "Normativa municipal La Paz. Replicar para otros municipios principales."
+
+
+# ========================================
+# RESUMEN DEL CATÁLOGO
+# ========================================
+#
+# OLA 1 (Prioridad 1 - MVP Crítico): 6 sitios
+#   - Gaceta Oficial
+#   - TSJ GENESIS
+#   - TCP
+#   - ASFI
+#   - SIN
+#   - Contraloría (Prioridad 2 pero en Ola 1)
+#
+# OLA 2 (Prioridad 2 - Importante): 5 sitios
+#   - SILEP
+#   - AIT
+#   - APS
+#   - ATT
+#   + Contraloría
+#
+# OLA 3+ (Prioridad 3 - Complementario): 4+ sitios
+#   - Lexivox
+#   - ANB
+#   - Gacetas departamentales (9)
+#   - Municipios principales (10+)
+#
+# TOTAL CATALOGADO: 16 sitios base
+# EXPANSIÓN POTENCIAL: 30+ sitios (con departamentales y municipales)
+#
