@@ -1,1 +1,53 @@
+# Dependencias para el Motor Multi-Sitio de Scraping Gubernamental
+# Fase 7: Arquitectura Multi-Sitio
 
+# Web Scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Selenium para sitios con JavaScript
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+
+# Procesamiento de PDFs
+PyPDF2>=3.0.0
+pdfplumber>=0.10.0
+
+# Parseo de fechas
+python-dateutil>=2.8.2
+
+# Manejo de CSV y JSON (incluidos en Python standard library pero listados para referencia)
+# csv - built-in
+# json - built-in
+
+# Utilidades
+pathlib>=1.0.1  # Manejo de rutas (built-in en Python 3.4+)
+
+# Logging mejorado (opcional)
+colorlog>=6.7.0
+
+# Testing (opcional pero recomendado)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Linting y formateo (opcional)
+black>=23.0.0
+flake8>=6.1.0
+mypy>=1.5.0
+
+# Análisis de texto (para extracción avanzada)
+regex>=2023.8.8
+
+# Para manejo de configuración (alternativa a JSON)
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# Para generación de reportes
+pandas>=2.0.0  # opcional, para análisis de datos
+
+# HTTP mejorado
+urllib3>=2.0.0
+
+# Para manejo de caracteres especiales
+chardet>=5.2.0

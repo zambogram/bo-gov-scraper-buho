@@ -1,0 +1,185 @@
+{
+  "sites": {
+    "gaceta": {
+      "id_sitio": "gaceta",
+      "nombre": "Gaceta Oficial de Bolivia",
+      "tipo": "gaceta",
+      "descripcion": "Publicación oficial del Estado Plurinacional de Bolivia",
+      "url_listado": "https://www.gacetaoficialdebolivia.gob.bo/normas/buscar",
+      "selectores_css": {
+        "contenedor_resultados": ".tabla-resultados",
+        "fila_documento": "tr.documento",
+        "link_pdf": "a.btn-descargar",
+        "titulo": ".titulo-norma",
+        "fecha": ".fecha-publicacion",
+        "numero_gaceta": ".numero-gaceta",
+        "tipo_norma": ".tipo-norma"
+      },
+      "tipo_paginacion": "scroll_infinito",
+      "requiere_selenium": true,
+      "selenium_options": {
+        "headless": true,
+        "wait_time": 5,
+        "scroll_pause": 2
+      },
+      "reglas_extraccion": {
+        "formato_documento": "pdf",
+        "extraer_texto": true,
+        "extraer_articulos": true,
+        "patron_articulos": "Art[ií]culo\\s+\\d+[°º]?",
+        "encoding": "utf-8"
+      },
+      "rate_limit": {
+        "requests_por_minuto": 10,
+        "delay_entre_requests": 6
+      },
+      "output_folder": "outputs/gaceta",
+      "campos_metadata": [
+        "fecha_publicacion",
+        "numero_gaceta",
+        "tipo_norma",
+        "titulo",
+        "url_pdf",
+        "fecha_descarga"
+      ]
+    },
+    "hermes": {
+      "id_sitio": "hermes",
+      "nombre": "Sistema Hermes - Contratos Públicos",
+      "tipo": "contratos",
+      "descripcion": "Sistema de contrataciones públicas de Bolivia",
+      "url_listado": "https://www.sicoes.gob.bo/portal/index.php",
+      "selectores_css": {
+        "contenedor_resultados": "#tabla-contratos",
+        "fila_documento": "tr.contrato",
+        "link_detalle": "a.ver-detalle",
+        "entidad": ".nombre-entidad",
+        "objeto": ".objeto-contratacion",
+        "monto": ".monto-contrato"
+      },
+      "tipo_paginacion": "paginado_numerico",
+      "requiere_selenium": true,
+      "selenium_options": {
+        "headless": true,
+        "wait_time": 3
+      },
+      "reglas_extraccion": {
+        "formato_documento": "html",
+        "extraer_texto": true,
+        "extraer_tablas": true
+      },
+      "rate_limit": {
+        "requests_por_minuto": 15,
+        "delay_entre_requests": 4
+      },
+      "output_folder": "outputs/hermes",
+      "campos_metadata": [
+        "entidad",
+        "objeto_contratacion",
+        "monto",
+        "fecha_publicacion",
+        "url_detalle"
+      ]
+    },
+    "icoes": {
+      "id_sitio": "icoes",
+      "nombre": "ICOES - Impuestos y Comercio Exterior",
+      "tipo": "impuestos",
+      "descripcion": "Instituto de Comercio Exterior y Seguros",
+      "url_listado": "https://www.icoes.gob.bo/consultas",
+      "selectores_css": {
+        "contenedor_resultados": ".lista-resoluciones",
+        "fila_documento": "div.resolucion",
+        "link_pdf": "a[href$='.pdf']"
+      },
+      "tipo_paginacion": "boton_siguiente",
+      "requiere_selenium": false,
+      "reglas_extraccion": {
+        "formato_documento": "pdf",
+        "extraer_texto": true
+      },
+      "rate_limit": {
+        "requests_por_minuto": 20,
+        "delay_entre_requests": 3
+      },
+      "output_folder": "outputs/icoes",
+      "campos_metadata": [
+        "numero_resolucion",
+        "fecha",
+        "tipo_documento",
+        "url_pdf"
+      ]
+    },
+    "derechos_reales": {
+      "id_sitio": "derechos_reales",
+      "nombre": "Derechos Reales",
+      "tipo": "registro_publico",
+      "descripcion": "Registro de Derechos Reales de Bolivia",
+      "url_listado": "https://www.derechosreales.gob.bo/consultas",
+      "selectores_css": {
+        "contenedor_resultados": "#resultados-busqueda",
+        "fila_documento": "tr.registro"
+      },
+      "tipo_paginacion": "paginado_numerico",
+      "requiere_selenium": true,
+      "selenium_options": {
+        "headless": true,
+        "wait_time": 4
+      },
+      "reglas_extraccion": {
+        "formato_documento": "html",
+        "extraer_texto": true,
+        "extraer_tablas": true
+      },
+      "rate_limit": {
+        "requests_por_minuto": 12,
+        "delay_entre_requests": 5
+      },
+      "output_folder": "outputs/derechos_reales",
+      "campos_metadata": [
+        "matricula",
+        "propietario",
+        "ubicacion",
+        "superficie",
+        "fecha_registro"
+      ]
+    },
+    "sin": {
+      "id_sitio": "sin",
+      "nombre": "Servicio de Impuestos Nacionales",
+      "tipo": "impuestos",
+      "descripcion": "Servicio de Impuestos Nacionales de Bolivia",
+      "url_listado": "https://www.impuestos.gob.bo/normativa",
+      "selectores_css": {
+        "contenedor_resultados": ".normativa-lista",
+        "fila_documento": "div.norma-item",
+        "link_pdf": "a.descargar-norma"
+      },
+      "tipo_paginacion": "scroll_infinito",
+      "requiere_selenium": true,
+      "selenium_options": {
+        "headless": true,
+        "wait_time": 3,
+        "scroll_pause": 1.5
+      },
+      "reglas_extraccion": {
+        "formato_documento": "pdf",
+        "extraer_texto": true,
+        "extraer_articulos": true,
+        "patron_articulos": "Art[ií]culo\\s+\\d+[°º]?"
+      },
+      "rate_limit": {
+        "requests_por_minuto": 15,
+        "delay_entre_requests": 4
+      },
+      "output_folder": "outputs/sin",
+      "campos_metadata": [
+        "numero_norma",
+        "tipo_norma",
+        "fecha_emision",
+        "materia",
+        "url_pdf"
+      ]
+    }
+  }
+}

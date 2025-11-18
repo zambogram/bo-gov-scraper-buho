@@ -205,3 +205,36 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# BO Gov Scraper Buho - Project specific
+# Outputs and downloaded files
+outputs/
+logs/
+data/
+exports/
+
+# Keep directory structure with .gitkeep files
+!outputs/.gitkeep
+!logs/.gitkeep
+!data/.gitkeep
+!exports/.gitkeep
+
+# Configuration overrides (keep template)
+config/local.json
+config/secrets.json
+
+# Selenium and browser drivers
+chromedriver
+geckodriver
+*.exe
+
+# Large files
+*.pdf
+*.zip
+*.tar.gz
+
+# CSV and JSON outputs (usually generated)
+*.csv
+*.json
+!config/sites.json
+!config/*.example.json
