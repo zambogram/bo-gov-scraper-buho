@@ -1,0 +1,266 @@
+# Configuración de Sitios Web del Gobierno Boliviano
+# Cada sitio tiene su propia configuración de scraping
+
+sites:
+  # ========== GACETA OFICIAL DE BOLIVIA ==========
+  - name: "Gaceta Oficial de Bolivia"
+    url: "https://www.gacetaoficialdebolivia.gob.bo"
+    enabled: true
+    priority: 1
+    area_derecho: "General"
+    scraping_config:
+      list_page: "/buscar/leyes"
+      pagination: true
+      max_pages: 100
+      selectors:
+        law_links: "a.law-link"
+        law_number: ".numero-ley"
+        law_title: ".titulo-ley"
+        law_date: ".fecha-promulgacion"
+        pdf_link: "a[href$='.pdf']"
+
+  # ========== ASAMBLEA LEGISLATIVA PLURINACIONAL ==========
+  - name: "Asamblea Legislativa Plurinacional"
+    url: "https://www.diputados.bo"
+    enabled: true
+    priority: 2
+    area_derecho: "Legislativo"
+    scraping_config:
+      list_page: "/leyes"
+      pagination: true
+      max_pages: 50
+      selectors:
+        law_links: ".ley-item a"
+        law_number: "span.numero"
+        law_title: "h3.titulo"
+        law_date: "span.fecha"
+
+  # ========== TRIBUNAL CONSTITUCIONAL ==========
+  - name: "Tribunal Constitucional Plurinacional"
+    url: "https://www.tcpbolivia.bo"
+    enabled: true
+    priority: 3
+    area_derecho: "Constitucional"
+    scraping_config:
+      list_page: "/sentencias"
+      pagination: true
+      max_pages: 200
+
+  # ========== MINISTERIO DE JUSTICIA ==========
+  - name: "Ministerio de Justicia"
+    url: "https://www.justicia.gob.bo"
+    enabled: true
+    priority: 4
+    area_derecho: "Justicia"
+
+  # ========== ÓRGANO JUDICIAL ==========
+  - name: "Órgano Judicial"
+    url: "https://www.organojudicial.gob.bo"
+    enabled: true
+    priority: 5
+    area_derecho: "Judicial"
+
+  # ========== MINISTERIO DE GOBIERNO ==========
+  - name: "Ministerio de Gobierno"
+    url: "https://www.mingobierno.gob.bo"
+    enabled: true
+    priority: 6
+    area_derecho: "Gobierno"
+
+  # ========== MINISTERIO DE ECONOMÍA ==========
+  - name: "Ministerio de Economía y Finanzas"
+    url: "https://www.economiayfinanzas.gob.bo"
+    enabled: true
+    priority: 7
+    area_derecho: "Económico-Financiero"
+
+  # ========== AUTORIDAD DE FISCALIZACIÓN Y CONTROL SOCIAL ==========
+  - name: "AEMP - Autoridad del Ministerio Público"
+    url: "https://www.fiscalia.gob.bo"
+    enabled: true
+    priority: 8
+    area_derecho: "Penal"
+
+  # ========== CONTRALORÍA GENERAL DEL ESTADO ==========
+  - name: "Contraloría General del Estado"
+    url: "https://www.contraloria.gob.bo"
+    enabled: true
+    priority: 9
+    area_derecho: "Administrativo"
+
+  # ========== MINISTERIO DE TRABAJO ==========
+  - name: "Ministerio de Trabajo"
+    url: "https://www.mintrabajo.gob.bo"
+    enabled: true
+    priority: 10
+    area_derecho: "Laboral"
+
+  # ========== MINISTERIO DE SALUD ==========
+  - name: "Ministerio de Salud"
+    url: "https://www.minsalud.gob.bo"
+    enabled: true
+    priority: 11
+    area_derecho: "Salud"
+
+  # ========== MINISTERIO DE EDUCACIÓN ==========
+  - name: "Ministerio de Educación"
+    url: "https://www.minedu.gob.bo"
+    enabled: true
+    priority: 12
+    area_derecho: "Educación"
+
+  # ========== MINISTERIO DE MEDIO AMBIENTE ==========
+  - name: "Ministerio de Medio Ambiente y Agua"
+    url: "https://www.mmaya.gob.bo"
+    enabled: true
+    priority: 13
+    area_derecho: "Ambiental"
+
+  # ========== MINISTERIO DE MINERÍA ==========
+  - name: "Ministerio de Minería y Metalurgia"
+    url: "https://www.mineria.gob.bo"
+    enabled: true
+    priority: 14
+    area_derecho: "Minero"
+
+  # ========== MINISTERIO DE HIDROCARBUROS ==========
+  - name: "Ministerio de Hidrocarburos"
+    url: "https://www.hidrocarburos.gob.bo"
+    enabled: true
+    priority: 15
+    area_derecho: "Hidrocarburos"
+
+  # ========== AUTORIDAD DE TIERRAS ==========
+  - name: "INRA - Instituto Nacional de Reforma Agraria"
+    url: "https://www.inra.gob.bo"
+    enabled: true
+    priority: 16
+    area_derecho: "Agrario"
+
+  # ========== AGENCIA ESTATAL DE VIVIENDA ==========
+  - name: "Ministerio de Obras Públicas"
+    url: "https://www.oopp.gob.bo"
+    enabled: true
+    priority: 17
+    area_derecho: "Obras Públicas"
+
+  # ========== MINISTERIO DE DESARROLLO PRODUCTIVO ==========
+  - name: "Ministerio de Desarrollo Productivo"
+    url: "https://www.produccion.gob.bo"
+    enabled: true
+    priority: 18
+    area_derecho: "Desarrollo Productivo"
+
+  # ========== MINISTERIO DE PLANIFICACIÓN ==========
+  - name: "Ministerio de Planificación del Desarrollo"
+    url: "https://www.planificacion.gob.bo"
+    enabled: true
+    priority: 19
+    area_derecho: "Planificación"
+
+  # ========== SENADO ==========
+  - name: "Cámara de Senadores"
+    url: "https://www.senado.bo"
+    enabled: true
+    priority: 20
+    area_derecho: "Legislativo"
+
+  # ========== DEFENSORÍA DEL PUEBLO ==========
+  - name: "Defensoría del Pueblo"
+    url: "https://www.defensoria.gob.bo"
+    enabled: true
+    priority: 21
+    area_derecho: "Derechos Humanos"
+
+  # ========== PROCURADURÍA GENERAL DEL ESTADO ==========
+  - name: "Procuraduría General del Estado"
+    url: "https://www.pge.gob.bo"
+    enabled: true
+    priority: 22
+    area_derecho: "Defensa del Estado"
+
+  # ========== AUTORIDAD DE REGULACIÓN DE TELECOMUNICACIONES ==========
+  - name: "ATT - Autoridad de Telecomunicaciones"
+    url: "https://www.att.gob.bo"
+    enabled: true
+    priority: 23
+    area_derecho: "Telecomunicaciones"
+
+  # ========== AUTORIDAD DE ELECTRICIDAD ==========
+  - name: "AE - Autoridad de Electricidad"
+    url: "https://www.ae.gob.bo"
+    enabled: true
+    priority: 24
+    area_derecho: "Energía Eléctrica"
+
+  # ========== AUTORIDAD DE TRANSPORTE ==========
+  - name: "ATT - Autoridad de Transporte"
+    url: "https://www.att.gob.bo"
+    enabled: true
+    priority: 25
+    area_derecho: "Transporte"
+
+  # ========== SERVICIO DE IMPUESTOS NACIONALES ==========
+  - name: "SIN - Servicio de Impuestos Nacionales"
+    url: "https://www.impuestos.gob.bo"
+    enabled: true
+    priority: 26
+    area_derecho: "Tributario"
+
+  # ========== ADUANA NACIONAL ==========
+  - name: "Aduana Nacional de Bolivia"
+    url: "https://www.aduana.gob.bo"
+    enabled: true
+    priority: 27
+    area_derecho: "Aduanero"
+
+  # ========== BANCO CENTRAL DE BOLIVIA ==========
+  - name: "Banco Central de Bolivia"
+    url: "https://www.bcb.gob.bo"
+    enabled: true
+    priority: 28
+    area_derecho: "Bancario-Financiero"
+
+  # ========== AUTORIDAD DE SUPERVISIÓN DEL SISTEMA FINANCIERO ==========
+  - name: "ASFI - Autoridad del Sistema Financiero"
+    url: "https://www.asfi.gob.bo"
+    enabled: true
+    priority: 29
+    area_derecho: "Sistema Financiero"
+
+  # ========== AUTORIDAD DE PENSIONES ==========
+  - name: "APS - Autoridad de Pensiones"
+    url: "https://www.aps.gob.bo"
+    enabled: true
+    priority: 30
+    area_derecho: "Seguridad Social"
+
+  # ========== MINISTERIO DE RELACIONES EXTERIORES ==========
+  - name: "Ministerio de Relaciones Exteriores"
+    url: "https://www.rree.gob.bo"
+    enabled: true
+    priority: 31
+    area_derecho: "Internacional"
+
+  # ========== MINISTERIO DE DEFENSA ==========
+  - name: "Ministerio de Defensa"
+    url: "https://www.mindef.gob.bo"
+    enabled: true
+    priority: 32
+    area_derecho: "Defensa"
+
+  # ========== POLICÍA BOLIVIANA ==========
+  - name: "Policía Boliviana"
+    url: "https://www.policia.gob.bo"
+    enabled: true
+    priority: 33
+    area_derecho: "Seguridad Ciudadana"
+
+
+# Configuración general de scraping
+scraping_settings:
+  concurrent_sites: 5  # Número de sitios a scrapear simultáneamente
+  delay_between_requests: 2  # Segundos de espera entre peticiones
+  timeout: 30  # Timeout para peticiones HTTP
+  retry_attempts: 3  # Intentos de reintento
+  user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 KHTML Gecko Chrome/91.0.4472.124 Safari/537.36"
