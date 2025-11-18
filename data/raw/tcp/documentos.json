@@ -1,0 +1,56 @@
+[
+  {
+    "site_id": "tcp",
+    "document_id": "TCP-SENTENCIA-CONSTITUCIONAL-100-2024-20250901",
+    "titulo": "Sentencia Constitucional 100/2024 - Acción de Inconstitucionalidad",
+    "tipo_norma": "Sentencia Constitucional",
+    "numero_norma": "100/2024",
+    "fecha_publicacion": "2025-09-01",
+    "url_detalle": "https://www.tcpbolivia.bo/tcp/jurisprudencia?id=100/2024",
+    "url_pdf": "https://www.tcpbolivia.bo/sentencias/SC_100_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "94efe537454d2b85b0ba2f1c23d69f20",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "materia": "Acción de Inconstitucionalidad",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.899962"
+  },
+  {
+    "site_id": "tcp",
+    "document_id": "TCP-DECLARACIÓN-CONSTITUCIONAL-101-2024-20251022",
+    "titulo": "Declaración Constitucional 101/2024 - Control de Constitucionalidad",
+    "tipo_norma": "Declaración Constitucional",
+    "numero_norma": "101/2024",
+    "fecha_publicacion": "2025-10-22",
+    "url_detalle": "https://www.tcpbolivia.bo/tcp/jurisprudencia?id=101/2024",
+    "url_pdf": "https://www.tcpbolivia.bo/sentencias/SC_101_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "724e1e90ae5ed1e5969b966af1d655a4",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "materia": "Control de Constitucionalidad",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.899984"
+  },
+  {
+    "site_id": "tcp",
+    "document_id": "TCP-AUTO-CONSTITUCIONAL-102-2024-20250919",
+    "titulo": "Auto Constitucional 102/2024 - Acción de Protección de Privacidad",
+    "tipo_norma": "Auto Constitucional",
+    "numero_norma": "102/2024",
+    "fecha_publicacion": "2025-09-19",
+    "url_detalle": "https://www.tcpbolivia.bo/tcp/jurisprudencia?id=102/2024",
+    "url_pdf": "https://www.tcpbolivia.bo/sentencias/SC_102_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "0c7db560cda40b89eac77f3c5e21a299",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "materia": "Acción de Protección de Privacidad",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.899995"
+  }
+]

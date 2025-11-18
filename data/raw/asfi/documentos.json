@@ -1,0 +1,56 @@
+[
+  {
+    "site_id": "asfi",
+    "document_id": "ASFI-RESOLUCIÓN-ASFI-200-2024-20251027",
+    "titulo": "Resolución ASFI 200/2024 - Protección al Consumidor Financiero",
+    "tipo_norma": "Resolución ASFI",
+    "numero_norma": "200/2024",
+    "fecha_publicacion": "2025-10-27",
+    "url_detalle": "https://www.asfi.gob.bo/index.php/normativa-list.html?id=200/2024",
+    "url_pdf": "https://www.asfi.gob.bo/normativa/ASFI_200_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "209e6fc10beaa7cdbff4ecb9ee5bee98",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "categoria": "Protección al Consumidor Financiero",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.901923"
+  },
+  {
+    "site_id": "asfi",
+    "document_id": "ASFI-REGLAMENTO-201-2024-20250919",
+    "titulo": "Reglamento 201/2024 - Prevención de Lavado de Activos",
+    "tipo_norma": "Reglamento",
+    "numero_norma": "201/2024",
+    "fecha_publicacion": "2025-09-19",
+    "url_detalle": "https://www.asfi.gob.bo/index.php/normativa-list.html?id=201/2024",
+    "url_pdf": "https://www.asfi.gob.bo/normativa/ASFI_201_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "f5819ebbb550ee07ad1d24a57e2a5d97",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "categoria": "Prevención de Lavado de Activos",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.901938"
+  },
+  {
+    "site_id": "asfi",
+    "document_id": "ASFI-CIRCULAR-202-2024-20250726",
+    "titulo": "Circular 202/2024 - Prevención de Lavado de Activos",
+    "tipo_norma": "Circular",
+    "numero_norma": "202/2024",
+    "fecha_publicacion": "2025-07-26",
+    "url_detalle": "https://www.asfi.gob.bo/index.php/normativa-list.html?id=202/2024",
+    "url_pdf": "https://www.asfi.gob.bo/normativa/ASFI_202_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "0ab1241533db3cd835f4089ca6359e36",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "categoria": "Prevención de Lavado de Activos",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.901948"
+  }
+]

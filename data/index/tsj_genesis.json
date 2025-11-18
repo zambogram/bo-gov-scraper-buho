@@ -1,0 +1,26 @@
+{
+  "TSJ_GENESIS-SENTENCIA-800-2024-20251021": {
+    "hash": "d32fe522f441b5e9dadd2192da6fceec",
+    "titulo": "Sentencia 800/2024 - Sala Social y Administrativa",
+    "fecha_publicacion": "2025-10-21",
+    "fecha_ultima_vez_visto": "2025-11-18T07:30:13.897906",
+    "estado": "nuevo",
+    "url_pdf": "https://genesis.tsj.gob.bo/pdf/sentencia_800_2024.pdf"
+  },
+  "TSJ_GENESIS-AUTO-SUPREMO-801-2024-20251008": {
+    "hash": "b8f271bec4d1f82fca52dc7de35cfa14",
+    "titulo": "Auto Supremo 801/2024 - Sala Social y Administrativa",
+    "fecha_publicacion": "2025-10-08",
+    "fecha_ultima_vez_visto": "2025-11-18T07:30:13.897912",
+    "estado": "nuevo",
+    "url_pdf": "https://genesis.tsj.gob.bo/pdf/sentencia_801_2024.pdf"
+  },
+  "TSJ_GENESIS-RESOLUCIÓN-802-2024-20251112": {
+    "hash": "dd1a788ca701fa62aa03eb72b331d057",
+    "titulo": "Resolución 802/2024 - Sala Penal",
+    "fecha_publicacion": "2025-11-12",
+    "fecha_ultima_vez_visto": "2025-11-18T07:30:13.897917",
+    "estado": "nuevo",
+    "url_pdf": "https://genesis.tsj.gob.bo/pdf/sentencia_802_2024.pdf"
+  }
+}

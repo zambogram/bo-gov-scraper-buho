@@ -1,0 +1,56 @@
+[
+  {
+    "site_id": "gaceta_oficial",
+    "document_id": "GACETA_OFICIAL-LEY-1400-20251108",
+    "titulo": "Ley 1400 - Ley de fortalecimiento institucional",
+    "tipo_norma": "Ley",
+    "numero_norma": "1400",
+    "fecha_publicacion": "2025-11-08",
+    "url_detalle": "http://www.gacetaoficialdebolivia.gob.bo/normas/buscar?id=1400",
+    "url_pdf": "http://www.gacetaoficialdebolivia.gob.bo/pdf/gaceta_1400.pdf",
+    "path_pdf": null,
+    "hash_contenido": "20ad1e5bbbf5bac9d6a444d09a835faf",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "modo": "demo",
+      "indice": 0
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.895284"
+  },
+  {
+    "site_id": "gaceta_oficial",
+    "document_id": "GACETA_OFICIAL-DECRETO-SUPREMO-1401-20251104",
+    "titulo": "Decreto Supremo 1401 - Reglamentación de la Ley de Empresas",
+    "tipo_norma": "Decreto Supremo",
+    "numero_norma": "1401",
+    "fecha_publicacion": "2025-11-04",
+    "url_detalle": "http://www.gacetaoficialdebolivia.gob.bo/normas/buscar?id=1401",
+    "url_pdf": "http://www.gacetaoficialdebolivia.gob.bo/pdf/gaceta_1401.pdf",
+    "path_pdf": null,
+    "hash_contenido": "c6a3ec8c24d269f015f6d4e6d0a9f689",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "modo": "demo",
+      "indice": 1
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.895307"
+  },
+  {
+    "site_id": "gaceta_oficial",
+    "document_id": "GACETA_OFICIAL-RESOLUCIÓN-MINISTERIAL-1402-20251030",
+    "titulo": "Resolución Ministerial 1402 - Normas técnicas de gestión pública",
+    "tipo_norma": "Resolución Ministerial",
+    "numero_norma": "1402",
+    "fecha_publicacion": "2025-10-30",
+    "url_detalle": "http://www.gacetaoficialdebolivia.gob.bo/normas/buscar?id=1402",
+    "url_pdf": "http://www.gacetaoficialdebolivia.gob.bo/pdf/gaceta_1402.pdf",
+    "path_pdf": null,
+    "hash_contenido": "934da0e73a7e754ba63401724db082e7",
+    "estado": "sin_cambios",
+    "metadata_extra": {
+      "modo": "demo",
+      "indice": 2
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.895320"
+  }
+]

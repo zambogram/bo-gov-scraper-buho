@@ -1,0 +1,184 @@
+# Catálogo de Sitios Gubernamentales de Bolivia
+# FASE 2 - OLA 1: Sitios de máxima prioridad
+
+sitios:
+  # =========================================
+  # OLA 1 - PRIORIDAD 1 (Máxima prioridad)
+  # =========================================
+
+  gaceta_oficial:
+    nombre: "Gaceta Oficial de Bolivia"
+    descripcion: "Publicación oficial del Estado Plurinacional de Bolivia con leyes, decretos y resoluciones"
+    prioridad: 1
+    categoria: "legislativo"
+    url_base: "http://www.gacetaoficialdebolivia.gob.bo"
+    url_listado: "http://www.gacetaoficialdebolivia.gob.bo/normas/buscar"
+    estado_scraper: "implementado"
+    frecuencia_actualizacion: "diaria"
+    tipo_documentos:
+      - "Leyes"
+      - "Decretos Supremos"
+      - "Resoluciones Ministeriales"
+      - "Resoluciones Administrativas"
+    formato_disponible: "PDF"
+    notas: "Sitio principal para normativa nacional. Incluye buscador por tipo, número y fecha."
+    selectores:
+      tabla_resultados: "table.table-striped tbody tr"
+      titulo: "td:nth-child(2)"
+      tipo_norma: "td:nth-child(1)"
+      numero: "td:nth-child(2)"
+      fecha: "td:nth-child(3)"
+      enlace_pdf: "td:nth-child(4) a"
+
+  tsj_genesis:
+    nombre: "Tribunal Supremo de Justicia - GENESIS"
+    descripcion: "Sistema de jurisprudencia del Tribunal Supremo de Justicia de Bolivia"
+    prioridad: 1
+    categoria: "judicial"
+    url_base: "https://genesis.tsj.gob.bo"
+    url_listado: "https://genesis.tsj.gob.bo/jurisprudencia/buscar"
+    estado_scraper: "implementado"
+    frecuencia_actualizacion: "semanal"
+    tipo_documentos:
+      - "Sentencias"
+      - "Autos Supremos"
+      - "Resoluciones"
+    formato_disponible: "PDF"
+    notas: "Sistema GENESIS del TSJ. Requiere navegación por paginación."
+    selectores:
+      tabla_resultados: "div.resultado-item"
+      numero_sentencia: "span.numero"
+      fecha: "span.fecha"
+      tipo_documento: "span.tipo"
+      enlace_detalle: "a.ver-detalle"
+      enlace_pdf: "a.descargar-pdf"
+
+  tcp:
+    nombre: "Tribunal Constitucional Plurinacional"
+    descripcion: "Sentencias constitucionales y jurisprudencia constitucional de Bolivia"
+    prioridad: 1
+    categoria: "judicial"
+    url_base: "https://www.tcpbolivia.bo"
+    url_listado: "https://www.tcpbolivia.bo/tcp/jurisprudencia"
+    estado_scraper: "implementado"
+    frecuencia_actualizacion: "semanal"
+    tipo_documentos:
+      - "Sentencias Constitucionales"
+      - "Declaraciones Constitucionales"
+      - "Autos Constitucionales"
+    formato_disponible: "PDF"
+    notas: "Jurisprudencia constitucional. Muy importante para análisis legal."
+    selectores:
+      tabla_resultados: "div.sentencia-item"
+      numero_sentencia: "h4.numero"
+      fecha: "span.fecha-publicacion"
+      tipo: "span.tipo-sentencia"
+      enlace_pdf: "a.btn-descargar"
+      resumen: "p.resumen"
+
+  asfi:
+    nombre: "Autoridad de Supervisión del Sistema Financiero"
+    descripcion: "Normativa financiera y regulación bancaria de Bolivia"
+    prioridad: 1
+    categoria: "regulatorio"
+    url_base: "https://www.asfi.gob.bo"
+    url_listado: "https://www.asfi.gob.bo/index.php/normativa-list.html"
+    estado_scraper: "implementado"
+    frecuencia_actualizacion: "semanal"
+    tipo_documentos:
+      - "Resoluciones ASFI"
+      - "Reglamentos"
+      - "Circulares"
+      - "Compendio Normativo"
+    formato_disponible: "PDF"
+    notas: "Regulación del sistema financiero. Incluye compendio de normativa vigente."
+    selectores:
+      tabla_resultados: "table.normativa-table tbody tr"
+      numero_resolucion: "td:nth-child(1)"
+      titulo: "td:nth-child(2)"
+      fecha: "td:nth-child(3)"
+      tipo: "td:nth-child(4)"
+      enlace_pdf: "td:nth-child(5) a"
+
+  sin:
+    nombre: "Servicio de Impuestos Nacionales"
+    descripcion: "Normativa tributaria y resoluciones del SIN"
+    prioridad: 1
+    categoria: "regulatorio"
+    url_base: "https://www.impuestos.gob.bo"
+    url_listado: "https://www.impuestos.gob.bo/normativa/"
+    estado_scraper: "implementado"
+    frecuencia_actualizacion: "semanal"
+    tipo_documentos:
+      - "Resoluciones Normativas de Directorio (RND)"
+      - "Resoluciones Administrativas (RA)"
+      - "Circulares"
+      - "Instructivos"
+    formato_disponible: "PDF"
+    notas: "Normativa tributaria nacional. Sistema de búsqueda por tipo y número de resolución."
+    selectores:
+      tabla_resultados: "div.normativa-list .item"
+      numero_norma: "span.numero"
+      titulo: "h5.titulo"
+      fecha: "span.fecha"
+      tipo: "span.tipo-norma"
+      enlace_pdf: "a.descargar"
+
+  # =========================================
+  # OLA 2 - PRIORIDAD 2 (Próxima fase)
+  # =========================================
+
+  ait:
+    nombre: "Autoridad de Impugnación Tributaria"
+    descripcion: "Resoluciones de impugnación tributaria"
+    prioridad: 2
+    categoria: "regulatorio"
+    url_base: "https://www.ait.gob.bo"
+    url_listado: "https://www.ait.gob.bo/resoluciones"
+    estado_scraper: "pendiente"
+    frecuencia_actualizacion: "semanal"
+    tipo_documentos:
+      - "Resoluciones Jerárquicas"
+      - "Autos de Vista"
+    formato_disponible: "PDF"
+    notas: "Segunda instancia en materia tributaria."
+
+  adsib:
+    nombre: "Agencia de Desarrollo de la Sociedad de la Información"
+    descripcion: "Normativa sobre gobierno electrónico y tecnología"
+    prioridad: 2
+    categoria: "regulatorio"
+    url_base: "https://www.adsib.gob.bo"
+    url_listado: "https://www.adsib.gob.bo/normativa"
+    estado_scraper: "pendiente"
+    frecuencia_actualizacion: "mensual"
+    tipo_documentos:
+      - "Resoluciones"
+      - "Reglamentos Técnicos"
+    formato_disponible: "PDF"
+    notas: "Normativa de interoperabilidad y gobierno electrónico."
+
+# Configuración general
+configuracion:
+  timeout_request: 30
+  max_reintentos: 3
+  delay_entre_requests: 2
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+
+# Constantes
+olas:
+  ola_1:
+    nombre: "Ola 1 - Prioridad Máxima"
+    descripcion: "Sitios críticos de normativa nacional"
+    site_ids:
+      - gaceta_oficial
+      - tsj_genesis
+      - tcp
+      - asfi
+      - sin
+  ola_2:
+    nombre: "Ola 2 - Prioridad Alta"
+    descripcion: "Sitios complementarios importantes"
+    site_ids:
+      - ait
+      - adsib

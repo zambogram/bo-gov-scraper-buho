@@ -1,0 +1,26 @@
+{
+  "TCP-SENTENCIA-CONSTITUCIONAL-100-2024-20250901": {
+    "hash": "94efe537454d2b85b0ba2f1c23d69f20",
+    "titulo": "Sentencia Constitucional 100/2024 - Acción de Inconstitucionalidad",
+    "fecha_publicacion": "2025-09-01",
+    "fecha_ultima_vez_visto": "2025-11-18T07:30:13.900008",
+    "estado": "nuevo",
+    "url_pdf": "https://www.tcpbolivia.bo/sentencias/SC_100_2024.pdf"
+  },
+  "TCP-DECLARACIÓN-CONSTITUCIONAL-101-2024-20251022": {
+    "hash": "724e1e90ae5ed1e5969b966af1d655a4",
+    "titulo": "Declaración Constitucional 101/2024 - Control de Constitucionalidad",
+    "fecha_publicacion": "2025-10-22",
+    "fecha_ultima_vez_visto": "2025-11-18T07:30:13.900014",
+    "estado": "nuevo",
+    "url_pdf": "https://www.tcpbolivia.bo/sentencias/SC_101_2024.pdf"
+  },
+  "TCP-AUTO-CONSTITUCIONAL-102-2024-20250919": {
+    "hash": "0c7db560cda40b89eac77f3c5e21a299",
+    "titulo": "Auto Constitucional 102/2024 - Acción de Protección de Privacidad",
+    "fecha_publicacion": "2025-09-19",
+    "fecha_ultima_vez_visto": "2025-11-18T07:30:13.900018",
+    "estado": "nuevo",
+    "url_pdf": "https://www.tcpbolivia.bo/sentencias/SC_102_2024.pdf"
+  }
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "site_id": "sin",
+    "document_id": "SIN-RESOLUCIÓN-NORMATIVA-DE-DIRECTORIO-(RND)-10024-20250914",
+    "titulo": "Resolución Normativa de Directorio (RND) Nº 10024 - Facturación Electrónica",
+    "tipo_norma": "Resolución Normativa de Directorio (RND)",
+    "numero_norma": "10024",
+    "fecha_publicacion": "2025-09-14",
+    "url_detalle": "https://www.impuestos.gob.bo/normativa/?id=10024",
+    "url_pdf": "https://www.impuestos.gob.bo/normativa/Resolución_10024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "9180ceb26d90cb8855172b9de1556b60",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "tema": "Facturación Electrónica",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.903838"
+  },
+  {
+    "site_id": "sin",
+    "document_id": "SIN-RESOLUCIÓN-ADMINISTRATIVA-(RA)-05025-20251109",
+    "titulo": "Resolución Administrativa (RA) Nº 05025 - Régimen Complementario al IVA (RC-IVA)",
+    "tipo_norma": "Resolución Administrativa (RA)",
+    "numero_norma": "05025",
+    "fecha_publicacion": "2025-11-09",
+    "url_detalle": "https://www.impuestos.gob.bo/normativa/?id=05025",
+    "url_pdf": "https://www.impuestos.gob.bo/normativa/Resolución_05025.pdf",
+    "path_pdf": null,
+    "hash_contenido": "1e0098c1a1b7ceb8da40b228f9f60ef5",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "tema": "Régimen Complementario al IVA (RC-IVA)",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.903854"
+  },
+  {
+    "site_id": "sin",
+    "document_id": "SIN-CIRCULAR-003-2024-20250713",
+    "titulo": "Circular Nº 003/2024 - Facturación Electrónica",
+    "tipo_norma": "Circular",
+    "numero_norma": "003/2024",
+    "fecha_publicacion": "2025-07-13",
+    "url_detalle": "https://www.impuestos.gob.bo/normativa/?id=003/2024",
+    "url_pdf": "https://www.impuestos.gob.bo/normativa/Circular_003/2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "977a4445b6627aae7ced90a3a55e9820",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "tema": "Facturación Electrónica",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.903864"
+  }
+]

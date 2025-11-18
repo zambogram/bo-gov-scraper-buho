@@ -1,0 +1,56 @@
+[
+  {
+    "site_id": "tsj_genesis",
+    "document_id": "TSJ_GENESIS-SENTENCIA-800-2024-20251021",
+    "titulo": "Sentencia 800/2024 - Sala Social y Administrativa",
+    "tipo_norma": "Sentencia",
+    "numero_norma": "800/2024",
+    "fecha_publicacion": "2025-10-21",
+    "url_detalle": "https://genesis.tsj.gob.bo/jurisprudencia/buscar?id=800/2024",
+    "url_pdf": "https://genesis.tsj.gob.bo/pdf/sentencia_800_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "d32fe522f441b5e9dadd2192da6fceec",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "sala": "Social y Administrativa",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.897843"
+  },
+  {
+    "site_id": "tsj_genesis",
+    "document_id": "TSJ_GENESIS-AUTO-SUPREMO-801-2024-20251008",
+    "titulo": "Auto Supremo 801/2024 - Sala Social y Administrativa",
+    "tipo_norma": "Auto Supremo",
+    "numero_norma": "801/2024",
+    "fecha_publicacion": "2025-10-08",
+    "url_detalle": "https://genesis.tsj.gob.bo/jurisprudencia/buscar?id=801/2024",
+    "url_pdf": "https://genesis.tsj.gob.bo/pdf/sentencia_801_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "b8f271bec4d1f82fca52dc7de35cfa14",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "sala": "Social y Administrativa",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.897863"
+  },
+  {
+    "site_id": "tsj_genesis",
+    "document_id": "TSJ_GENESIS-RESOLUCIÓN-802-2024-20251112",
+    "titulo": "Resolución 802/2024 - Sala Penal",
+    "tipo_norma": "Resolución",
+    "numero_norma": "802/2024",
+    "fecha_publicacion": "2025-11-12",
+    "url_detalle": "https://genesis.tsj.gob.bo/jurisprudencia/buscar?id=802/2024",
+    "url_pdf": "https://genesis.tsj.gob.bo/pdf/sentencia_802_2024.pdf",
+    "path_pdf": null,
+    "hash_contenido": "dd1a788ca701fa62aa03eb72b331d057",
+    "estado": "nuevo",
+    "metadata_extra": {
+      "sala": "Penal",
+      "modo": "demo"
+    },
+    "fecha_scraping": "2025-11-18T07:30:13.897890"
+  }
+]
