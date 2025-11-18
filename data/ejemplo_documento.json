@@ -1,0 +1,72 @@
+{
+  "sitio": "gaceta",
+  "tipo_norma": "ley",
+  "numero_norma": "1234",
+  "fecha_norma": "2023-11-15",
+  "titulo": "Ley de Transparencia y Acceso a la Información Pública",
+  "url_fuente": "https://www.gacetaoficialdebolivia.gob.bo/normas/view/1234",
+  "url_pdf": "https://www.gacetaoficialdebolivia.gob.bo/normas/download/1234.pdf",
+  "filename_pdf": "ley_1234_2023.pdf",
+  "metodo_extraccion": "pdf_text",
+  "paginas": 15,
+  "caracteres": 45000,
+  "fecha_extraccion": "2025-11-18T10:30:00",
+  "estado": "extraido",
+  "metadata": {
+    "promulgada_por": "Asamblea Legislativa Plurinacional",
+    "publicada_en": "Gaceta Oficial Nº 1500",
+    "vigencia": "2023-12-01"
+  },
+  "articulos": [
+    {
+      "numero": "1",
+      "titulo": "Objeto de la Ley",
+      "contenido": "La presente Ley tiene por objeto garantizar el ejercicio del derecho fundamental de acceso a la información pública, promoviendo la transparencia en la gestión pública y el fortalecimiento de la democracia participativa en el Estado Plurinacional de Bolivia."
+    },
+    {
+      "numero": "2",
+      "titulo": "Ámbito de Aplicación",
+      "contenido": "Esta Ley es de aplicación obligatoria para:\n\na) El Órgano Ejecutivo en todos sus niveles: nacional, departamental, municipal y autonomías indígena originario campesinas.\n\nb) El Órgano Legislativo: Asamblea Legislativa Plurinacional, asambleas departamentales y concejos municipales.\n\nc) El Órgano Judicial y el Tribunal Constitucional Plurinacional.\n\nd) El Órgano Electoral Plurinacional.\n\ne) Las empresas públicas, instituciones y entidades del sector público.\n\nf) Las entidades privadas que administren recursos públicos o presten servicios públicos."
+    },
+    {
+      "numero": "3",
+      "titulo": "Principios",
+      "contenido": "El acceso a la información pública se rige por los siguientes principios:\n\n1. Máxima Publicidad: Toda información en poder del Estado es pública y accesible a cualquier persona, salvo las excepciones expresamente establecidas.\n\n2. Transparencia Activa: Las entidades públicas deben difundir de manera proactiva información de interés público.\n\n3. Gratuidad: El acceso a la información pública es gratuito, salvo los costos de reproducción.\n\n4. Celeridad: Las solicitudes de información deben ser atendidas en los plazos establecidos.\n\n5. No Discriminación: Toda persona tiene derecho a acceder a la información sin discriminación alguna."
+    },
+    {
+      "numero": "4",
+      "titulo": "Definiciones",
+      "contenido": "Para efectos de la presente Ley, se entiende por:\n\na) Información Pública: Todo documento, dato o registro en cualquier formato o soporte que se encuentre en posesión de las entidades públicas.\n\nb) Transparencia Activa: Obligación de las entidades de publicar y difundir información relevante sin necesidad de solicitud previa.\n\nc) Transparencia Pasiva: Derecho de las personas a solicitar información específica a las entidades públicas.\n\nd) Datos Personales: Información de una persona natural identificada o identificable.\n\ne) Portal de Transparencia: Sitio web donde las entidades publican información de acceso público."
+    },
+    {
+      "numero": "5",
+      "titulo": "Derecho de Acceso",
+      "contenido": "Toda persona, natural o jurídica, tiene derecho a solicitar y recibir información de las entidades obligadas, sin necesidad de justificar su interés o motivación.\n\nEl ejercicio de este derecho no requiere la demostración de interés legítimo, afectación personal ni acreditación de razón alguna que motive el requerimiento."
+    },
+    {
+      "numero": "6",
+      "titulo": "Procedimiento de Solicitud",
+      "contenido": "La solicitud de acceso a la información debe cumplir los siguientes requisitos mínimos:\n\na) Nombres y apellidos del solicitante o razón social.\n\nb) Número de documento de identidad o NIT.\n\nc) Descripción clara de la información requerida.\n\nd) Medio preferido para recibir la información (correo electrónico, físico, etc.).\n\nLa solicitud puede presentarse de forma presencial, por correo electrónico o a través del portal de transparencia de la entidad."
+    },
+    {
+      "numero": "7",
+      "titulo": "Plazos de Respuesta",
+      "contenido": "Las entidades públicas deben responder las solicitudes de información en un plazo máximo de diez (10) días hábiles, contados desde la recepción de la solicitud.\n\nEn casos excepcionales y debidamente justificados, este plazo podrá ampliarse por cinco (5) días hábiles adicionales, debiendo notificarse al solicitante antes del vencimiento del plazo inicial."
+    },
+    {
+      "numero": "8",
+      "titulo": "Excepciones al Acceso",
+      "contenido": "Se podrá denegar el acceso a la información cuando:\n\na) Esté clasificada como reservada o confidencial por ley expresa.\n\nb) Afecte la seguridad y defensa nacional.\n\nc) Comprometa la vida, seguridad o salud de una persona.\n\nd) Contenga datos personales sensibles.\n\ne) Afecte secretos comerciales o propiedad intelectual protegidos.\n\nLa negativa debe ser motivada y por escrito, indicando las disposiciones legales que la fundamentan."
+    },
+    {
+      "numero": "9",
+      "titulo": "Portal de Transparencia",
+      "contenido": "Todas las entidades públicas deben mantener actualizado un Portal de Transparencia que contenga, como mínimo:\n\na) Estructura orgánica y directorio de autoridades.\n\nb) Marco normativo aplicable.\n\nc) Presupuesto institucional y ejecución presupuestaria.\n\nd) Contratos y convenios suscritos.\n\ne) Planificación y rendición de cuentas.\n\nf) Información sobre procesos de contratación.\n\ng) Viáticos y gastos de representación de autoridades.\n\nh) Estados financieros auditados.\n\nLa información debe actualizarse trimestralmente."
+    },
+    {
+      "numero": "10",
+      "titulo": "Sanciones",
+      "contenido": "Los servidores públicos que incumplan las disposiciones de la presente Ley serán pasibles de las siguientes sanciones:\n\na) Amonestación escrita.\n\nb) Multa equivalente al 20% de su remuneración mensual.\n\nc) Suspensión de funciones sin goce de haberes hasta por 30 días.\n\nd) Destitución del cargo, en caso de reincidencia.\n\nLas sanciones se aplicarán sin perjuicio de las responsabilidades civiles y penales que correspondan."
+    }
+  ]
+}
