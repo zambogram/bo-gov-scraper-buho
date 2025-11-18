@@ -175,8 +175,20 @@ def run_site_pipeline(
         _log(f"✓ Componentes inicializados (incluye exportación y metadata extendida)")
 
         # Listar documentos disponibles
-        _log(f"📋 Listando documentos disponibles...")
-        documentos_metadata = scraper.listar_documentos(limite=limit)
+        if mode == "full":
+            _log(f"📋 Listando documentos disponibles (modo histórico completo)...")
+            documentos_metadata = scraper.listar_documentos_historico_completo(
+                limite_total=limit,
+                progress_callback=_log
+            )
+        else:
+            _log(f"📋 Listando documentos disponibles (modo delta)...")
+            documentos_metadata = scraper.listar_documentos(
+                limite=limit,
+                modo="delta",
+                pagina=1
+            )
+
         result.total_encontrados = len(documentos_metadata)
         _log(f"✓ Encontrados {result.total_encontrados} documentos")
 

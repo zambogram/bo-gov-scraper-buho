@@ -1,9 +1,19 @@
 """
 Scraper para Tribunal Constitucional Plurinacional (TCP)
+
+NOTA: Este scraper utiliza datos de ejemplo para demostración.
+Para implementación real, reemplazar con requests HTTP reales al sitio del TCP.
+
+Estructura esperada del sitio real:
+- URL base: https://www.tcpbolivia.bo
+- Búsqueda: /tcp/busqueda
+- Paginación: parámetros de query string
+- PDFs: /tcp/sentencias/{año}/sc-{numero}-{año}.pdf
 """
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 import logging
+from datetime import datetime, timedelta
 
 from .base_scraper import BaseScraper
 
@@ -11,64 +21,103 @@ logger = logging.getLogger(__name__)
 
 
 class TCPScraper(BaseScraper):
-    """Scraper para TCP"""
+    """
+    Scraper para TCP con soporte para scraping histórico completo
+
+    Implementación actual: Datos de ejemplo
+    TODO: Implementar scraping real con requests al sitio web
+    """
 
     def __init__(self):
         super().__init__('tcp')
         logger.info(f"Inicializado scraper para {self.config.nombre}")
 
-    def listar_documentos(self, limite: Optional[int] = None) -> List[Dict[str, Any]]:
+    def listar_documentos(
+        self,
+        limite: Optional[int] = None,
+        modo: str = "delta",
+        pagina: int = 1
+    ) -> List[Dict[str, Any]]:
         """
         Listar sentencias del TCP
 
         Args:
             limite: Número máximo de documentos
+            modo: 'full' o 'delta'
+            pagina: Número de página (para paginación)
 
         Returns:
             Lista de metadata de documentos
         """
-        # NOTA: Esta es una implementación de demostración
-        # En la implementación real, aquí se haría scraping del sitio real
+        logger.info(f"Listando documentos de {self.site_id} - modo: {modo}, página: {pagina}")
 
-        logger.info(f"Listando documentos de {self.site_id} (límite: {limite})")
+        # =====================================================================
+        # IMPLEMENTACIÓN CON DATOS DE EJEMPLO
+        # =====================================================================
+        # En producción, aquí iría:
+        # 1. Construir URL con paginación: f"{self.config.url_search}?page={pagina}"
+        # 2. Hacer request HTTP: response = self.session.get(url)
+        # 3. Parsear HTML con BeautifulSoup: soup = BeautifulSoup(response.text)
+        # 4. Extraer datos de cada sentencia: titulo, número, fecha, URL PDF
+        # 5. Retornar lista de diccionarios con metadata
+        # =====================================================================
 
-        # Datos de ejemplo
-        documentos_ejemplo = [
-            {
-                'id_documento': 'tcp_sc_0001_2024',
+        # Generar datos de ejemplo por página
+        documentos_por_pagina = self.items_por_pagina
+
+        # Simular que tenemos 100 documentos totales divididos en páginas
+        total_documentos = 100
+        max_paginas = (total_documentos + documentos_por_pagina - 1) // documentos_por_pagina
+
+        # Si la página solicitada excede el máximo, retornar vacío
+        if pagina > max_paginas:
+            logger.info(f"Página {pagina} excede máximo ({max_paginas}), retornando vacío")
+            return []
+
+        # Calcular índices para esta página
+        inicio = (pagina - 1) * documentos_por_pagina
+        fin = min(inicio + documentos_por_pagina, total_documentos)
+
+        documentos_pagina = []
+
+        # Generar documentos de ejemplo para esta página
+        for i in range(inicio, fin):
+            numero_sentencia = f"{i+1:04d}/2024"
+            fecha = datetime(2024, 1, 1) + timedelta(days=i*2)
+
+            doc = {
+                'id_documento': f'tcp_sc_{i+1:04d}_2024',
                 'tipo_documento': 'Sentencia Constitucional',
-                'numero_norma': '0001/2024',
-                'fecha': '2024-01-15',
-                'titulo': 'Sentencia Constitucional 0001/2024-S1',
-                'url': f'{self.config.url_base}/sentencias/2024/sc-0001-2024.pdf',
-                'sumilla': 'Acción de Amparo Constitucional'
-            },
-            {
-                'id_documento': 'tcp_sc_0002_2024',
-                'tipo_documento': 'Sentencia Constitucional',
-                'numero_norma': '0002/2024',
-                'fecha': '2024-01-20',
-                'titulo': 'Sentencia Constitucional 0002/2024-S2',
-                'url': f'{self.config.url_base}/sentencias/2024/sc-0002-2024.pdf',
-                'sumilla': 'Acción de Libertad'
-            },
-            {
-                'id_documento': 'tcp_sc_0003_2024',
-                'tipo_documento': 'Sentencia Constitucional',
-                'numero_norma': '0003/2024',
-                'fecha': '2024-02-01',
-                'titulo': 'Sentencia Constitucional 0003/2024-S1',
-                'url': f'{self.config.url_base}/sentencias/2024/sc-0003-2024.pdf',
-                'sumilla': 'Recurso de Inconstitucionalidad'
+                'numero_norma': numero_sentencia,
+                'fecha': fecha.strftime('%Y-%m-%d'),
+                'titulo': f'Sentencia Constitucional {numero_sentencia}-S{(i % 3) + 1}',
+                'url': f'{self.config.url_base}/sentencias/2024/sc-{i+1:04d}-2024.pdf',
+                'sumilla': self._generar_sumilla_ejemplo(i)
             }
-        ]
+
+            documentos_pagina.append(doc)
 
         # Aplicar límite si se especifica
         if limite:
-            documentos_ejemplo = documentos_ejemplo[:limite]
+            documentos_pagina = documentos_pagina[:limite]
 
-        logger.info(f"✓ Encontrados {len(documentos_ejemplo)} documentos en {self.site_id}")
-        return documentos_ejemplo
+        logger.info(f"✓ Página {pagina}: {len(documentos_pagina)} documentos")
+
+        return documentos_pagina
+
+    def _generar_sumilla_ejemplo(self, idx: int) -> str:
+        """Generar sumilla de ejemplo variada"""
+        sumillas = [
+            'Acción de Amparo Constitucional contra actos de autoridad administrativa',
+            'Acción de Libertad por detención preventiva sin fundamentación',
+            'Recurso de Inconstitucionalidad contra norma departamental',
+            'Acción Popular contra resolución municipal lesiva a derechos colectivos',
+            'Conflicto de competencias entre entidades territoriales autónomas',
+            'Control previo de constitucionalidad de proyecto de ley',
+            'Acción de Protección de Privacidad sobre datos personales',
+            'Acción de Cumplimiento para ejecución de sentencia'
+        ]
+        return sumillas[idx % len(sumillas)]
 
     def descargar_pdf(self, url: str, ruta_destino: Path) -> bool:
         """
@@ -81,19 +130,59 @@ class TCPScraper(BaseScraper):
         Returns:
             True si se descargó correctamente
         """
-        # En implementación real, usaría self._download_file(url, ruta_destino)
-        # Por ahora, crear un PDF de ejemplo
+        logger.info(f"Descargando PDF: {url}")
 
-        logger.info(f"Descargando PDF de ejemplo: {ruta_destino.name}")
+        # =====================================================================
+        # IMPLEMENTACIÓN CON DATOS DE EJEMPLO
+        # =====================================================================
+        # En producción, descomentar y usar:
+        # return self._download_file(url, ruta_destino)
+        # =====================================================================
 
-        # Crear archivo de ejemplo
-        ruta_destino.parent.mkdir(parents=True, exist_ok=True)
+        # Por ahora, crear un PDF de prueba vacío
+        logger.warning("MODO DEMO: Creando PDF de prueba vacío")
 
-        # Contenido de ejemplo
-        contenido_ejemplo = b'%PDF-1.4\nEjemplo de PDF del TCP\n'
+        try:
+            ruta_destino.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(ruta_destino, 'wb') as f:
-            f.write(contenido_ejemplo)
+            # Crear PDF de prueba con PyPDF2
+            from PyPDF2 import PdfWriter, PdfReader
+            from io import BytesIO
 
-        logger.info(f"✓ PDF de ejemplo creado: {ruta_destino}")
-        return True
+            # Crear un PDF simple con texto
+            from reportlab.pdfgen import canvas
+            from reportlab.lib.pagesizes import letter
+
+            buffer = BytesIO()
+            c = canvas.Canvas(buffer, pagesize=letter)
+            c.drawString(100, 750, "TRIBUNAL CONSTITUCIONAL PLURINACIONAL")
+            c.drawString(100, 730, "SENTENCIA CONSTITUCIONAL DE EJEMPLO")
+            c.drawString(100, 700, f"Fuente: {url}")
+            c.drawString(100, 650, "Este es un PDF de ejemplo generado para demostración.")
+            c.drawString(100, 630, "En producción, aquí iría el contenido real descargado del sitio.")
+
+            # Añadir artículos de ejemplo
+            y = 580
+            for i in range(1, 6):
+                c.drawString(100, y, f"Artículo {i}.- Contenido del artículo {i} de ejemplo.")
+                y -= 30
+
+            c.save()
+
+            # Guardar el PDF
+            buffer.seek(0)
+            with open(ruta_destino, 'wb') as f:
+                f.write(buffer.getvalue())
+
+            logger.info(f"✓ PDF de prueba creado: {ruta_destino.name}")
+            return True
+
+        except ImportError:
+            # Si no está reportlab, crear archivo vacío
+            logger.warning("reportlab no disponible, creando archivo vacío")
+            ruta_destino.touch()
+            return True
+
+        except Exception as e:
+            logger.error(f"✗ Error creando PDF de prueba: {e}")
+            return False

@@ -763,10 +763,10 @@ def render_tab_qa_revision(site_id: str, site_config):
         st.success("✅ No se detectaron problemas de calidad")
 
     # =========================================================================
-    # SECCIÓN 7: Archivos Disponibles
+    # SECCIÓN 7: Archivos Disponibles y Descarga
     # =========================================================================
     st.markdown("---")
-    st.subheader("📁 Archivos Disponibles")
+    st.subheader("📁 Archivos Disponibles y Descarga")
 
     col1, col2, col3 = st.columns(3)
 
@@ -774,6 +774,24 @@ def render_tab_qa_revision(site_id: str, site_config):
         if doc_info.get('ruta_pdf'):
             st.success("✅ PDF disponible")
             st.caption(doc_info['ruta_pdf'])
+
+            # Botón de descarga PDF
+            try:
+                pdf_path = Path(doc_info['ruta_pdf'])
+                if pdf_path.exists():
+                    with open(pdf_path, 'rb') as f:
+                        pdf_bytes = f.read()
+                    st.download_button(
+                        label="⬇️ Descargar PDF",
+                        data=pdf_bytes,
+                        file_name=f"{selected_doc_id}.pdf",
+                        mime="application/pdf",
+                        key=f"download_pdf_{selected_doc_id}"
+                    )
+                else:
+                    st.caption("⚠️ Archivo no encontrado en disco")
+            except Exception as e:
+                st.caption(f"⚠️ Error: {e}")
         else:
             st.info("ℹ️ PDF no guardado")
 
@@ -781,6 +799,24 @@ def render_tab_qa_revision(site_id: str, site_config):
         if doc_info.get('ruta_txt'):
             st.success("✅ TXT disponible")
             st.caption(doc_info['ruta_txt'])
+
+            # Botón de descarga TXT
+            try:
+                txt_path = Path(doc_info['ruta_txt'])
+                if txt_path.exists():
+                    with open(txt_path, 'r', encoding='utf-8') as f:
+                        txt_content = f.read()
+                    st.download_button(
+                        label="⬇️ Descargar TXT",
+                        data=txt_content,
+                        file_name=f"{selected_doc_id}.txt",
+                        mime="text/plain",
+                        key=f"download_txt_{selected_doc_id}"
+                    )
+                else:
+                    st.caption("⚠️ Archivo no encontrado en disco")
+            except Exception as e:
+                st.caption(f"⚠️ Error: {e}")
         else:
             st.error("❌ TXT no disponible")
 
@@ -788,6 +824,24 @@ def render_tab_qa_revision(site_id: str, site_config):
         if doc_info.get('ruta_json'):
             st.success("✅ JSON disponible")
             st.caption(doc_info['ruta_json'])
+
+            # Botón de descarga JSON
+            try:
+                json_path = Path(doc_info['ruta_json'])
+                if json_path.exists():
+                    with open(json_path, 'r', encoding='utf-8') as f:
+                        json_content = f.read()
+                    st.download_button(
+                        label="⬇️ Descargar JSON",
+                        data=json_content,
+                        file_name=f"{selected_doc_id}.json",
+                        mime="application/json",
+                        key=f"download_json_{selected_doc_id}"
+                    )
+                else:
+                    st.caption("⚠️ Archivo no encontrado en disco")
+            except Exception as e:
+                st.caption(f"⚠️ Error: {e}")
         else:
             st.error("❌ JSON no disponible")
 
