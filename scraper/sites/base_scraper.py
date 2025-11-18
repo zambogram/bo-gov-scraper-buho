@@ -1,19 +1,26 @@
 """
 Scraper base para todos los sitios
 Soporte para scraping histórico completo y delta updates
+Con manejo robusto de errores y verificación de disponibilidad
 """
 from abc import ABC, abstractmethod
 from typing import List, Optional, Dict, Any, Tuple
 from pathlib import Path
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 import time
 import logging
 from datetime import datetime
+import urllib3
 
 from scraper.models import Documento
 from config import get_site_config
 
 logger = logging.getLogger(__name__)
+
+# Desactivar warnings de SSL para sitios con certificados mal configurados
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class BaseScraper(ABC):
@@ -32,10 +39,25 @@ class BaseScraper(ABC):
         if not self.config:
             raise ValueError(f"Configuración no encontrada para sitio: {site_id}")
 
-        # Configuración de requests
+        # Configuración de requests con retry automático
         self.session = requests.Session()
+
+        # Configurar retry strategy (3 intentos con backoff exponencial)
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[429, 500, 502, 503, 504],
+            backoff_factor=2,  # 2s, 4s, 8s
+            allowed_methods=["HEAD", "GET", "OPTIONS"]
+        )
+
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session.mount("http://", adapter)
+        self.session.mount("https://", adapter)
+
         self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 BUHO Legal Scraper/1.0'
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 BUHO Legal Scraper/1.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
         })
 
         # Delay entre requests
@@ -43,6 +65,97 @@ class BaseScraper(ABC):
 
         # Items por página
         self.items_por_pagina = self.config.scraper.get('items_por_pagina', 20)
+
+        # Estado de disponibilidad (se actualiza con check_availability)
+        self._is_available = None
+        self._last_availability_check = None
+
+    def check_availability(self, force: bool = False) -> Tuple[bool, str]:
+        """
+        Verificar si el sitio está disponible y accesible
+
+        Args:
+            force: Forzar verificación incluso si hay un check reciente
+
+        Returns:
+            Tupla (is_available, message) con el estado y mensaje descriptivo
+        """
+        # Si tenemos un check reciente (< 5 minutos) y no se fuerza, usar cache
+        if not force and self._last_availability_check:
+            tiempo_desde_check = (datetime.now() - self._last_availability_check).total_seconds()
+            if tiempo_desde_check < 300:  # 5 minutos
+                mensaje = "Disponible (cache)" if self._is_available else "No disponible (cache)"
+                return self._is_available, mensaje
+
+        logger.info(f"🔍 Verificando disponibilidad de {self.site_id}...")
+
+        # Intentar acceder a la URL base
+        try:
+            response = self.session.head(
+                self.config.url_base,
+                timeout=10,
+                verify=False,  # Ignorar errores SSL
+                allow_redirects=True
+            )
+
+            # Considerar disponible si: 200, 301, 302, 403 (algunos sitios bloquean HEAD)
+            if response.status_code in [200, 301, 302, 403]:
+                self._is_available = True
+                self._last_availability_check = datetime.now()
+                mensaje = f"✅ Disponible (status {response.status_code})"
+                logger.info(mensaje)
+                return True, mensaje
+
+            # Si HEAD falló, intentar GET ligero
+            response = self.session.get(
+                self.config.url_base,
+                timeout=10,
+                verify=False,
+                allow_redirects=True
+            )
+
+            if response.status_code == 200:
+                self._is_available = True
+                self._last_availability_check = datetime.now()
+                mensaje = "✅ Disponible (GET exitoso)"
+                logger.info(mensaje)
+                return True, mensaje
+
+            # Código de error
+            self._is_available = False
+            self._last_availability_check = datetime.now()
+            mensaje = f"❌ Error HTTP {response.status_code}"
+            logger.warning(f"{self.site_id}: {mensaje}")
+            return False, mensaje
+
+        except requests.exceptions.SSLError as e:
+            # Error SSL - sitio existe pero certificado mal configurado
+            self._is_available = False
+            self._last_availability_check = datetime.now()
+            mensaje = "⚠️ Error SSL (certificado mal configurado)"
+            logger.warning(f"{self.site_id}: {mensaje}")
+            return False, mensaje
+
+        except requests.exceptions.Timeout:
+            self._is_available = False
+            self._last_availability_check = datetime.now()
+            mensaje = "⏱️ Timeout (servidor no responde)"
+            logger.warning(f"{self.site_id}: {mensaje}")
+            return False, mensaje
+
+        except requests.exceptions.ConnectionError as e:
+            self._is_available = False
+            self._last_availability_check = datetime.now()
+            mensaje = "🔌 Error de conexión (servidor caído)"
+            logger.warning(f"{self.site_id}: {mensaje}")
+            return False, mensaje
+
+        except Exception as e:
+            self._is_available = False
+            self._last_availability_check = datetime.now()
+            mensaje = f"❌ Error inesperado: {type(e).__name__}"
+            logger.error(f"{self.site_id}: {mensaje} - {e}")
+            return False, mensaje
 
     @abstractmethod
     def listar_documentos(
