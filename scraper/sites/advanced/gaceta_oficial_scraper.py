@@ -65,7 +65,7 @@ class GacetaOficialScraper(BaseScraper):
             # Esperar entre requests (respeto al servidor)
             time.sleep(2)
 
-            response = self.session.get(url, timeout=30)
+            response = self.session.get(url, timeout=60)
             logger.info(f"Status: {response.status_code}")
 
             if response.status_code == 200:
