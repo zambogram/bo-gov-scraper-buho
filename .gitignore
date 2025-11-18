@@ -1,3 +1,7 @@
+# Archivos descargados por el scraper
+data/*.pdf
+exports/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
