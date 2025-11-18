@@ -11,13 +11,37 @@ import json
 
 @dataclass
 class Articulo:
-    """Modelo para un artículo o sección dentro de un documento legal"""
+    """
+    Modelo para un artículo o sección dentro de un documento legal
+
+    Tipos de unidad soportados:
+    - Leyes/Decretos: articulo, paragrafo, inciso, numeral, capitulo, seccion, titulo, disposicion
+    - Sentencias: vistos, resultando, antecedentes, considerando, fundamento, por_tanto, parte_resolutiva
+    - Resoluciones: considerando, resuelve, articulo
+    - General: documento (si no se puede segmentar)
+    """
     id_articulo: str
     id_documento: str
-    numero: Optional[str] = None  # "Artículo 1", "Art. 5", "Sección I"
-    titulo: Optional[str] = None
-    contenido: str = ""
-    tipo_unidad: str = "articulo"  # articulo, seccion, capitulo, titulo, disposicion
+    numero: Optional[str] = None  # "1", "5", "I", "a)"
+    titulo: Optional[str] = None  # Título de la unidad si existe
+    contenido: str = ""  # Texto completo de la unidad
+    tipo_unidad: str = "articulo"  # Ver tipos en docstring
+
+    # Jerarquía de numeración
+    numero_articulo: Optional[str] = None  # Para parágrafos/incisos: artículo padre
+    numero_paragrafo: Optional[str] = None  # Para incisos: parágrafo padre
+    numero_inciso: Optional[str] = None
+    numero_numeral: Optional[str] = None
+
+    # Posición y contexto
+    orden_en_documento: int = 0  # Posición secuencial en el documento
+    nivel_jerarquico: int = 1  # 1=artículo, 2=parágrafo, 3=inciso, 4=numeral
+
+    # Metadata semántica
+    palabras_clave_unidad: List[str] = field(default_factory=list)
+    area_principal_unidad: Optional[str] = None  # Área de derecho inferida
+
+    # Metadata adicional flexible
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:

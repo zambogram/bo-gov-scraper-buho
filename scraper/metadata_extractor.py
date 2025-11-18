@@ -482,3 +482,137 @@ class LegalMetadataExtractor:
                 metadata['ambito'] = 'Relaciones Laborales'
 
         return metadata
+
+    # ============================================================================
+    # MÉTODOS PARA METADATA A NIVEL DE UNIDAD (ARTÍCULO/SECCIÓN)
+    # ============================================================================
+
+    def extraer_metadata_unidad(
+        self,
+        contenido_unidad: str,
+        tipo_unidad: str = "articulo",
+        area_documento: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Extraer metadata específica para una unidad individual (artículo, parágrafo, etc.)
+
+        Args:
+            contenido_unidad: Texto del artículo/sección
+            tipo_unidad: Tipo de unidad (articulo, paragrafo, inciso, etc.)
+            area_documento: Área principal del documento (para contexto)
+
+        Returns:
+            Diccionario con palabras_clave_unidad y area_principal_unidad
+        """
+        metadata_unidad = {}
+
+        # Palabras clave específicas de la unidad
+        metadata_unidad['palabras_clave_unidad'] = self._extraer_palabras_clave_unidad(
+            contenido_unidad,
+            tipo_unidad
+        )
+
+        # Área principal de la unidad (puede diferir del documento)
+        metadata_unidad['area_principal_unidad'] = self._clasificar_area_unidad(
+            contenido_unidad,
+            area_documento
+        )
+
+        return metadata_unidad
+
+    def _extraer_palabras_clave_unidad(
+        self,
+        texto: str,
+        tipo_unidad: str
+    ) -> List[str]:
+        """
+        Extraer palabras clave de una unidad individual
+
+        Args:
+            texto: Contenido de la unidad
+            tipo_unidad: Tipo de unidad
+
+        Returns:
+            Lista de palabras clave (máximo 10)
+        """
+        if not texto or len(texto) < 20:
+            return []
+
+        texto_lower = texto.lower()
+        palabras_clave = set()
+
+        # Detectar palabras clave por contexto
+        palabras_contexto = {
+            'tributario': ['impuesto', 'contribución', 'tasa', 'tributo', 'iva', 'iue', 'it'],
+            'laboral': ['trabajador', 'empleador', 'salario', 'contrato', 'despido', 'jornada'],
+            'penal': ['delito', 'pena', 'sanción', 'prisión', 'culpable'],
+            'civil': ['obligación', 'contrato', 'propiedad', 'derecho real'],
+            'administrativo': ['procedimiento', 'recurso', 'resolución administrativa'],
+            'constitucional': ['derecho fundamental', 'garantía', 'constitucional'],
+            'financiero': ['banco', 'entidad financiera', 'supervisión', 'capital'],
+            'comercial': ['sociedad', 'empresa', 'comercio', 'mercantil']
+        }
+
+        # Buscar coincidencias
+        for contexto, terminos in palabras_contexto.items():
+            for termino in terminos:
+                if termino in texto_lower:
+                    palabras_clave.add(termino)
+
+        # Extraer términos legales comunes
+        terminos_legales = [
+            'deberá', 'podrá', 'obligación', 'derecho', 'responsabilidad',
+            'sanción', 'procedimiento', 'plazo', 'término', 'requisito',
+            'autorización', 'prohibición', 'excepción', 'modificación'
+        ]
+
+        for termino in terminos_legales:
+            if termino in texto_lower and len(palabras_clave) < 10:
+                palabras_clave.add(termino)
+
+        # Retornar top 10
+        return list(palabras_clave)[:10]
+
+    def _clasificar_area_unidad(
+        self,
+        texto: str,
+        area_documento: Optional[str] = None
+    ) -> Optional[str]:
+        """
+        Clasificar área del derecho para una unidad específica
+
+        Args:
+            texto: Contenido de la unidad
+            area_documento: Área del documento completo (contexto)
+
+        Returns:
+            Área principal detectada o None
+        """
+        if not texto or len(texto) < 50:
+            return area_documento  # Heredar del documento si es muy corta
+
+        texto_lower = texto.lower()
+        puntuaciones = {}
+
+        # Evaluar cada área
+        for area, palabras_clave in self.AREAS_DERECHO.items():
+            if area == 'otros':
+                continue
+
+            puntuacion = 0
+            for palabra in palabras_clave[:15]:  # Top 15 palabras por área
+                if palabra in texto_lower:
+                    puntuacion += 1
+
+            if puntuacion > 0:
+                puntuaciones[area] = puntuacion
+
+        # Si hay detección clara, retornar
+        if puntuaciones:
+            area_detectada = max(puntuaciones, key=puntuaciones.get)
+            # Solo retornar si hay al menos 2 coincidencias o si es diferente del área del documento
+            if puntuaciones[area_detectada] >= 2 or area_detectada != area_documento:
+                return area_detectada
+
+        # Si no hay detección clara, heredar del documento
+        return area_documento

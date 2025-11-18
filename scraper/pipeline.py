@@ -251,7 +251,13 @@ def run_site_pipeline(
                 # === PASO 3: Parsear y dividir en artículos ===
                 _log(f"  🔍 Parseando artículos...")
                 try:
-                    articulos = parser.parsear_documento(id_doc, texto)
+                    # Parsear con contexto site-aware (tipo de documento y sitio)
+                    articulos = parser.parsear_documento(
+                        id_doc,
+                        texto,
+                        tipo_documento=documento.tipo_documento,
+                        site_id=site_id
+                    )
                     documento.articulos = articulos
                     _log(f"  ✓ Parseados {len(articulos)} artículos/secciones")
 

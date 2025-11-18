@@ -59,14 +59,20 @@ class DataExporter:
         )
         self.csv_docs_writer.writeheader()
 
-        # Archivo CSV para artículos
+        # Archivo CSV para artículos (con campos extendidos)
         csv_arts_path = session_dir / "articulos.csv"
         self.csv_articulos = open(csv_arts_path, 'w', encoding='utf-8', newline='')
         self.csv_arts_writer = csv.DictWriter(
             self.csv_articulos,
             fieldnames=[
                 'id_articulo', 'id_documento', 'numero', 'titulo',
-                'tipo_unidad', 'contenido_preview'
+                'tipo_unidad', 'contenido_preview',
+                # Jerarquía
+                'numero_articulo', 'numero_paragrafo', 'numero_inciso', 'numero_numeral',
+                # Posición
+                'orden_en_documento', 'nivel_jerarquico',
+                # Metadata semántica
+                'palabras_clave_unidad', 'area_principal_unidad'
             ]
         )
         self.csv_arts_writer.writeheader()
@@ -112,7 +118,7 @@ class DataExporter:
             }
             self.csv_docs_writer.writerow(row_doc)
 
-            # Exportar artículos a CSV
+            # Exportar artículos a CSV (con campos extendidos)
             for articulo in documento.articulos:
                 row_art = {
                     'id_articulo': articulo.id_articulo,
@@ -120,7 +126,18 @@ class DataExporter:
                     'numero': articulo.numero or '',
                     'titulo': articulo.titulo or '',
                     'tipo_unidad': articulo.tipo_unidad,
-                    'contenido_preview': articulo.contenido[:200] if articulo.contenido else ''
+                    'contenido_preview': articulo.contenido[:200] if articulo.contenido else '',
+                    # Jerarquía
+                    'numero_articulo': articulo.numero_articulo or '',
+                    'numero_paragrafo': articulo.numero_paragrafo or '',
+                    'numero_inciso': articulo.numero_inciso or '',
+                    'numero_numeral': articulo.numero_numeral or '',
+                    # Posición
+                    'orden_en_documento': articulo.orden_en_documento,
+                    'nivel_jerarquico': articulo.nivel_jerarquico,
+                    # Metadata semántica
+                    'palabras_clave_unidad': ','.join(articulo.palabras_clave_unidad) if articulo.palabras_clave_unidad else '',
+                    'area_principal_unidad': articulo.area_principal_unidad or ''
                 }
                 self.csv_arts_writer.writerow(row_art)
 
