@@ -1,0 +1,166 @@
+# Catálogo de sitios web del Estado Boliviano para scraping
+# Estructura: id, nombre, tipo, url_base, prioridad, metadata
+
+sites:
+  tcp:
+    id: tcp
+    nombre: "Tribunal Constitucional Plurinacional"
+    tipo: "Tribunal"
+    categoria: "Judicial"
+    url_base: "https://www.tcpbolivia.bo"
+    url_search: "https://www.tcpbolivia.bo/tcp/busqueda"
+    prioridad: 1
+    ola: 1
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Sentencia Constitucional"
+        - "Declaración Constitucional"
+        - "Auto Constitucional"
+      fecha_inicio: "2012-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: false
+    scraper:
+      tipo: "dynamic"  # requiere selenium/playwright
+      paginacion: true
+      items_por_pagina: 20
+      delay_entre_requests: 2
+
+  tsj:
+    id: tsj
+    nombre: "Tribunal Supremo de Justicia"
+    tipo: "Tribunal"
+    categoria: "Judicial"
+    url_base: "https://tsj.bo"
+    url_search: "https://tsj.bo/jurisprudencia"
+    prioridad: 1
+    ola: 1
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Auto Supremo"
+        - "Sentencia"
+        - "Resolución"
+      fecha_inicio: "2010-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: true
+    scraper:
+      tipo: "static"
+      paginacion: true
+      items_por_pagina: 50
+      delay_entre_requests: 1
+
+  asfi:
+    id: asfi
+    nombre: "Autoridad de Supervisión del Sistema Financiero"
+    tipo: "Entidad Reguladora"
+    categoria: "Regulación Financiera"
+    url_base: "https://www.asfi.gob.bo"
+    url_search: "https://www.asfi.gob.bo/index.php/normativa"
+    prioridad: 2
+    ola: 1
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Resolución Administrativa"
+        - "Circular"
+        - "Reglamento"
+      fecha_inicio: "2000-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: false
+    scraper:
+      tipo: "static"
+      paginacion: true
+      items_por_pagina: 30
+      delay_entre_requests: 1
+
+  sin:
+    id: sin
+    nombre: "Servicio de Impuestos Nacionales"
+    tipo: "Entidad Tributaria"
+    categoria: "Tributación"
+    url_base: "https://www.impuestos.gob.bo"
+    url_search: "https://www.impuestos.gob.bo/index.php/normativa"
+    prioridad: 2
+    ola: 2
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Resolución Normativa"
+        - "Resolución Administrativa"
+        - "Ley Tributaria"
+      fecha_inicio: "2000-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: false
+    scraper:
+      tipo: "static"
+      paginacion: true
+      items_por_pagina: 50
+      delay_entre_requests: 1
+
+  contraloria:
+    id: contraloria
+    nombre: "Contraloría General del Estado"
+    tipo: "Órgano de Control"
+    categoria: "Control y Auditoría"
+    url_base: "https://www.contraloria.gob.bo"
+    url_search: "https://www.contraloria.gob.bo/portal/Normativas.html"
+    prioridad: 2
+    ola: 2
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Resolución"
+        - "Directriz"
+        - "Normativa de Auditoría"
+      fecha_inicio: "2005-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: true
+    scraper:
+      tipo: "static"
+      paginacion: true
+      items_por_pagina: 20
+      delay_entre_requests: 2
+
+  gaceta_oficial:
+    id: gaceta_oficial
+    nombre: "Gaceta Oficial de Bolivia"
+    tipo: "Gaceta"
+    categoria: "Publicación Oficial"
+    url_base: "https://www.gacetaoficialdebolivia.gob.bo"
+    url_search: "https://www.gacetaoficialdebolivia.gob.bo/ediciones"
+    prioridad: 1
+    ola: 1
+    activo: false  # Por implementar en siguiente fase
+    metadatos:
+      tipo_documentos:
+        - "Ley"
+        - "Decreto Supremo"
+        - "Resolución Ministerial"
+        - "Resolución Bi-Ministerial"
+        - "Resolución Suprema"
+      fecha_inicio: "1900-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: true
+    scraper:
+      tipo: "complex"  # Requiere lógica especial para ediciones
+      paginacion: true
+      items_por_pagina: 100
+      delay_entre_requests: 3
+      notas: "Scraper pendiente de implementación. Estructura lista para integración."
+
+# Configuración global
+global_config:
+  data_base_dir: "data"
+  logs_dir: "logs"
+  exports_dir: "exports"
+  max_concurrent_downloads: 3
+  timeout_requests: 30
+  retry_attempts: 3
+  user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 BUHO Legal Scraper/1.0"

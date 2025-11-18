@@ -1,1 +1,35 @@
+# BO-GOV-SCRAPER-BUHO - Requirements
+# Scraper legal de sitios del Estado Boliviano
 
+# Core dependencies
+python-dotenv>=1.0.0
+
+# Web scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# PDF processing
+PyPDF2>=3.0.0
+pdfplumber>=0.10.0  # Alternativa a PyPDF2
+pypdfium2>=4.0.0    # Otra alternativa moderna
+
+# OCR (opcional pero recomendado)
+pytesseract>=0.3.10
+Pillow>=10.0.0
+pdf2image>=1.16.0
+
+# Data processing
+pandas>=2.0.0
+pyyaml>=6.0.1
+
+# UI
+streamlit>=1.28.0
+plotly>=5.17.0      # Para gráficos interactivos en Streamlit
+
+# Database (opcional, para Supabase)
+supabase>=2.0.0
+
+# Utilities
+python-dateutil>=2.8.2
+tqdm>=4.66.0        # Barras de progreso en CLI
