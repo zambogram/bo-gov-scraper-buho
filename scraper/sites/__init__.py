@@ -4,6 +4,7 @@ Módulo de scrapers para sitios específicos
 
 from .base_scraper import BaseScraper
 from .tcp_scraper import TCPScraper
+from .tcp_gaceta_scraper import TCPGacetaScraper
 from .tsj_scraper import TSJScraper
 from .asfi_scraper import ASFIScraper
 from .sin_scraper import SINScraper
@@ -23,6 +24,7 @@ except ImportError:
 # Prioridad a scrapers avanzados si están disponibles
 SCRAPERS = {
     'tcp': TCPScraper,
+    'tcp_gaceta': TCPGacetaScraper,
     'tsj': TSJScraper,
     'asfi': ASFIScraper,
     'sin': SINScraper,
@@ -56,6 +58,7 @@ def get_scraper(site_id: str) -> BaseScraper:
 __all__ = [
     "BaseScraper",
     "TCPScraper",
+    "TCPGacetaScraper",
     "TSJScraper",
     "ASFIScraper",
     "SINScraper",

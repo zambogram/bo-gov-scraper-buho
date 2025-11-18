@@ -2,6 +2,31 @@
 # Estructura: id, nombre, tipo, url_base, prioridad, metadata
 
 sites:
+  tcp_gaceta:
+    id: tcp_gaceta
+    nombre: "Gaceta Constitucional Plurinacional - TCP"
+    tipo: "Tribunal"
+    categoria: "Judicial"
+    url_base: "https://tcpbolivia.bo"
+    url_search: "https://tcpbolivia.bo/gaceta/"
+    prioridad: 1
+    ola: 1
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Gaceta Constitucional Plurinacional"
+        - "Gaceta Constitucional - Guía de Uso"
+      fecha_inicio: "2018-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: true
+      descripcion: "Compilación oficial anual de jurisprudencia constitucional del TCP"
+    scraper:
+      tipo: "static"
+      paginacion: false
+      items_por_pagina: 50
+      delay_entre_requests: 2
+
   tcp:
     id: tcp
     nombre: "Tribunal Constitucional Plurinacional"
@@ -11,7 +36,7 @@ sites:
     url_search: "https://www.tcpbolivia.bo/tcp/busqueda"
     prioridad: 1
     ola: 1
-    activo: true
+    activo: false
     metadatos:
       tipo_documentos:
         - "Sentencia Constitucional"
