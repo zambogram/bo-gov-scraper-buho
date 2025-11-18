@@ -1,1 +1,19 @@
+# BÚHO - Scraper de Gaceta Oficial de Bolivia
+# Dependencias del proyecto - Fase 3
 
+# Web scraping
+requests==2.31.0
+beautifulsoup4==4.12.3
+lxml==5.1.0
+
+# Utilidades
+python-dateutil==2.8.2
+
+# Para futuras fases (OCR y procesamiento)
+# pytesseract==0.3.10
+# pdf2image==1.17.0
+# Pillow==10.2.0
+
+# Para la aplicación Streamlit (opcional)
+# streamlit==1.31.0
+# pandas==2.2.0
