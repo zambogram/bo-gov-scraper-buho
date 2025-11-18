@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "id_documento": "decreto_supremo_1234",
+    "tipo_norma": "Decreto Supremo",
+    "numero_norma": 1234,
+    "fecha_publicacion": "2023-05-15",
+    "titulo": "Decreto de Transparencia y Acceso a la Información",
+    "descripcion": "Norma que regula el acceso a la información pública"
+  },
+  "articles": [
+    {
+      "articulo_numero": "1",
+      "titulo_articulo": "",
+      "texto": "Artículo 1.- Objeto\nEl presente Decreto Supremo tiene por objeto establecer los mecanismos de transparencia y acceso a la información pública en todas las entidades del Estado Plurinacional de Bolivia."
+    },
+    {
+      "articulo_numero": "2",
+      "titulo_articulo": "",
+      "texto": "Artículo 2.- Ámbito de aplicación\nLas disposiciones del presente Decreto Supremo son de aplicación obligatoria para todas las entidades públicas del nivel central del Estado, entidades territoriales autónomas, empresas públicas y toda institución que maneje recursos del Estado."
+    },
+    {
+      "articulo_numero": "3",
+      "titulo_articulo": "La gestión pública se regirá por los siguientes principios:",
+      "texto": "Artículo 3.- Principios\nLa gestión pública se regirá por los siguientes principios:\na) Transparencia en el manejo de recursos públicos\nb) Publicidad de los actos administrativos\nc) Acceso libre a la información pública\nd) Rendición de cuentas periódica"
+    },
+    {
+      "articulo_numero": "4",
+      "titulo_articulo": "",
+      "texto": "Artículo 4.- Información pública\nSe considera información pública toda aquella producida, administrada o en poder de las entidades públicas, en cualquier formato o soporte."
+    },
+    {
+      "articulo_numero": "5",
+      "titulo_articulo": "",
+      "texto": "Artículo 5.- Portal de transparencia\nTodas las entidades públicas deberán implementar un portal de transparencia en internet donde se publique la información de manera actualizada y accesible."
+    },
+    {
+      "articulo_numero": "6",
+      "titulo_articulo": "",
+      "texto": "Artículo 6.- Responsables\nLos titulares de las entidades públicas son responsables de garantizar el cumplimiento del presente Decreto Supremo."
+    },
+    {
+      "articulo_numero": "7",
+      "titulo_articulo": "",
+      "texto": "Artículo 7.- Sanciones\nEl incumplimiento de las disposiciones establecidas en el presente Decreto Supremo dará lugar a la aplicación de sanciones administrativas, civiles y penales según corresponda.\n\nDISPOSICIONES FINALES\n\nEl presente Decreto Supremo entrará en vigencia a partir de su publicación en la Gaceta Oficial de Bolivia.\n\nEs dado en el Palacio de Gobierno de la ciudad de La Paz, a los quince días del mes de mayo del año dos mil veintitrés.\n\nFDO. EVO MORALES AYMA, David Choquehuanca Céspedes, Carlos Romero Bonifaz"
+    }
+  ],
+  "statistics": {
+    "total_articles": 7,
+    "total_characters": 1764,
+    "articles_with_title": 1
+  }
+}

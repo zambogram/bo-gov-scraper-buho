@@ -1,1 +1,23 @@
+# FASE 5: Parser Legal por Artículos
+# Dependencias principales para el proyecto BO GOV SCRAPER - BUHO
 
+# Procesamiento de datos
+pandas>=2.0.0
+
+# Para futuras fases (web scraping)
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Para extracción de texto de PDFs (fases futuras)
+PyPDF2>=3.0.0
+pdfplumber>=0.10.0
+
+# Para análisis de texto (fases futuras)
+# nltk>=3.8.0
+# spacy>=3.7.0
+
+# Para la interfaz Streamlit
+streamlit>=1.28.0
+
+# Utilidades
+python-dateutil>=2.8.2
