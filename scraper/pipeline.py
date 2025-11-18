@@ -9,11 +9,13 @@ from datetime import datetime
 import tempfile
 import shutil
 
-from config import get_site_config
+from config import get_site_config, settings
 from scraper.models import Documento, PipelineResult
 from scraper.sites import get_scraper
 from scraper.extractors import PDFExtractor
 from scraper.parsers import LegalParser
+from scraper.metadata_extractor import LegalMetadataExtractor
+from scraper.exporter import DataExporter, HistoricalTracker
 
 logger = logging.getLogger(__name__)
 
@@ -150,9 +152,27 @@ def run_site_pipeline(
         scraper = get_scraper(site_id)
         extractor = PDFExtractor(usar_ocr=site_config.metadatos.get('requiere_ocr', False))
         parser = LegalParser()
+        metadata_extractor = LegalMetadataExtractor()
         index_manager = IndexManager(site_config.index_file)
 
-        _log(f"✓ Componentes inicializados")
+        # Inicializar exportador
+        export_dir = settings.exports_dir
+        exporter = DataExporter(export_dir)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        exporter.iniciar_sesion_exportacion(site_id, timestamp)
+
+        # Tracker histórico
+        tracker_file = settings.data_base_dir / "tracking_historico.json"
+        tracker = HistoricalTracker(tracker_file)
+
+        # Tracking de metadata agregada
+        metadata_agregada = {
+            'areas': [],
+            'tipos': [],
+            'jerarquias': []
+        }
+
+        _log(f"✓ Componentes inicializados (incluye exportación y metadata extendida)")
 
         # Listar documentos disponibles
         _log(f"📋 Listando documentos disponibles...")
@@ -227,6 +247,35 @@ def run_site_pipeline(
                     result.agregar_error(f"Error parseando: {id_doc}", str(e))
                     # Continuar sin artículos
 
+                # === PASO 3.5: Extraer metadata extendida ===
+                _log(f"  📊 Extrayendo metadata extendida...")
+                try:
+                    metadata_ext = metadata_extractor.extraer_metadata_completa(
+                        texto=texto,
+                        titulo=documento.titulo,
+                        tipo_documento=documento.tipo_documento,
+                        sumilla=documento.sumilla
+                    )
+
+                    # Agregar metadata al documento
+                    documento.metadata.update(metadata_ext)
+
+                    # Tracking para reporte
+                    if metadata_ext.get('area_principal'):
+                        metadata_agregada['areas'].append(metadata_ext['area_principal'])
+                    if metadata_ext.get('tipo_norma'):
+                        metadata_agregada['tipos'].append(metadata_ext['tipo_norma'])
+                    if metadata_ext.get('jerarquia'):
+                        metadata_agregada['jerarquias'].append(metadata_ext['jerarquia'])
+
+                    _log(f"  ✓ Metadata: Área={metadata_ext.get('area_principal', 'N/A')}, "
+                         f"Tipo={metadata_ext.get('tipo_norma', 'N/A')}, "
+                         f"Jerarquía={metadata_ext.get('jerarquia', 'N/A')}")
+
+                except Exception as e:
+                    result.agregar_error(f"Error extrayendo metadata: {id_doc}", str(e))
+                    metadata_ext = {}
+
                 # === PASO 4: Guardar JSON ===
                 if save_json:
                     _log(f"  💾 Guardando JSON...")
@@ -240,7 +289,15 @@ def run_site_pipeline(
                     except Exception as e:
                         result.agregar_error(f"Error guardando JSON: {id_doc}", str(e))
 
-                # === PASO 5: Actualizar índice ===
+                # === PASO 5: Exportar documento ===
+                _log(f"  📤 Exportando datos...")
+                try:
+                    exporter.exportar_documento(documento, metadata_ext)
+                    _log(f"  ✓ Documento exportado")
+                except Exception as e:
+                    result.agregar_error(f"Error exportando: {id_doc}", str(e))
+
+                # === PASO 6: Actualizar índice ===
                 documento.actualizar_hash()
                 index_manager.actualizar_documento(documento)
                 result.total_parseados += 1
@@ -261,6 +318,26 @@ def run_site_pipeline(
         _log(f"\n💾 Guardando índice...")
         index_manager.guardar_indice()
 
+        # Finalizar exportación
+        _log(f"📤 Finalizando exportación...")
+        rutas_exportadas = exporter.finalizar_sesion_exportacion()
+
+        # Generar reporte completo
+        estadisticas_reporte = {
+            'total_encontrados': result.total_encontrados,
+            'total_descargados': result.total_descargados,
+            'total_parseados': result.total_parseados,
+            'total_errores': result.total_errores,
+            'duracion_segundos': result.duracion_segundos,
+            'areas_procesadas': metadata_agregada['areas'],
+            'tipos_procesados': metadata_agregada['tipos'],
+            'jerarquias': metadata_agregada['jerarquias']
+        }
+        reporte_path = exporter.generar_reporte_completo(site_id, timestamp, estadisticas_reporte)
+
+        # Registrar en tracker histórico
+        tracker.registrar_sesion(site_id, result, metadata_agregada)
+
         # Finalizar
         result.finalizar()
 
@@ -270,6 +347,10 @@ def run_site_pipeline(
         _log(f"   Total parseados: {result.total_parseados}")
         _log(f"   Total errores: {result.total_errores}")
         _log(f"   Duración: {result.duracion_segundos:.2f}s")
+        _log(f"\n📁 Exportaciones:")
+        for nombre, ruta in rutas_exportadas.items():
+            _log(f"   {nombre}: {ruta}")
+        _log(f"📊 Reporte: {reporte_path}")
 
         return result
 

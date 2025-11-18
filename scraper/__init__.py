@@ -7,6 +7,8 @@ from .pipeline import run_site_pipeline, run_all_sites_pipeline
 from .sites import get_scraper, SCRAPERS
 from .extractors import PDFExtractor
 from .parsers import LegalParser
+from .metadata_extractor import LegalMetadataExtractor
+from .exporter import DataExporter, HistoricalTracker
 
 __all__ = [
     "Documento",
@@ -18,4 +20,7 @@ __all__ = [
     "SCRAPERS",
     "PDFExtractor",
     "LegalParser",
+    "LegalMetadataExtractor",
+    "DataExporter",
+    "HistoricalTracker",
 ]
