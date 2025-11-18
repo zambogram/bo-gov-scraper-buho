@@ -169,14 +169,39 @@ class BaseScraper(ABC):
         """
         pass
 
-    def _download_file(self, url: str, destino: Path, timeout: int = 30) -> bool:
+    def _validar_pdf(self, content: bytes, url: str) -> bool:
         """
-        Método auxiliar para descargar archivos
+        Validar que el contenido descargado sea realmente un PDF
+
+        Args:
+            content: Contenido descargado en bytes
+            url: URL original (para logging)
+
+        Returns:
+            True si es un PDF válido, False si no
+        """
+        # Verificar que no esté vacío
+        if not content or len(content) == 0:
+            logger.warning(f"⚠️ Contenido vacío desde: {url}")
+            return False
+
+        # Verificar magic bytes de PDF (%PDF)
+        if not content.startswith(b'%PDF'):
+            logger.warning(f"⚠️ El archivo NO es un PDF (magic bytes incorrectos): {url}")
+            logger.warning(f"   Primeros 50 bytes: {content[:50]}")
+            return False
+
+        return True
+
+    def _download_file(self, url: str, destino: Path, timeout: int = 30, validar_pdf: bool = True) -> bool:
+        """
+        Método auxiliar para descargar archivos con validación de PDF
 
         Args:
             url: URL del archivo
             destino: Ruta de destino
             timeout: Timeout en segundos
+            validar_pdf: Si True, valida que sea un PDF real
 
         Returns:
             True si se descargó correctamente
@@ -189,13 +214,30 @@ class BaseScraper(ABC):
             response = self.session.get(url, timeout=timeout, stream=True)
             response.raise_for_status()
 
+            # Verificar Content-Type si está disponible
+            content_type = response.headers.get('Content-Type', '')
+            if validar_pdf and content_type:
+                if 'text/html' in content_type:
+                    logger.warning(f"⚠️ La URL retorna HTML, no PDF: {url}")
+                    logger.warning(f"   Content-Type: {content_type}")
+                    return False
+
+            # Leer contenido completo para validación
+            content = b''
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    content += chunk
+
+            # Validar que sea PDF si se solicitó
+            if validar_pdf:
+                if not self._validar_pdf(content, url):
+                    return False
+
             # Guardar
             with open(destino, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk)
+                f.write(content)
 
-            logger.info(f"✓ Descargado: {destino.name}")
+            logger.info(f"✓ Descargado: {destino.name} ({len(content)} bytes)")
 
             # Esperar antes del siguiente request
             time.sleep(self.delay)

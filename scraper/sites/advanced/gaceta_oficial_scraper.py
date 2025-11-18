@@ -33,10 +33,6 @@ class GacetaOficialScraper(BaseScraper):
             'Accept-Encoding': 'gzip, deflate',
             'Connection': 'keep-alive',
             'Upgrade-Insecure-Requests': '1',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'none',
-            'Cache-Control': 'max-age=0'
         })
 
     def listar_documentos(
@@ -75,77 +71,118 @@ class GacetaOficialScraper(BaseScraper):
             if response.status_code == 200:
                 soup = BeautifulSoup(response.content, 'html.parser')
 
-                # La Gaceta usa una estructura específica
-                # Buscar elementos que contengan leyes/decretos
+                # Buscar todos los cards que contienen documentos
+                cards = soup.find_all('div', class_=re.compile(r'card'))
 
-                # Estrategia 1: Buscar enlaces con fechas
-                enlaces = soup.find_all('a', href=True)
+                logger.info(f"📋 Cards encontrados: {len(cards)}")
 
-                for enlace in enlaces:
-                    if len(documentos) >= (limite or float('inf')):
+                # Procesar cada card
+                for card in cards:
+                    if limite and len(documentos) >= limite:
                         break
 
-                    href = enlace['href']
-                    texto = enlace.get_text(strip=True)
+                    # Buscar enlace de descarga PDF
+                    pdf_link = card.find('a', href=lambda x: x and '/normas/descargarNrms/' in x)
 
-                    # Filtrar solo enlaces relevantes (con fechas o números de ley)
-                    if re.search(r'(LEY|DECRETO|RESOLU|20\d{2})', texto, re.I):
+                    if not pdf_link:
+                        continue
 
-                        # Construir URL completa
-                        if not href.startswith('http'):
-                            if href.startswith('/'):
-                                url_pdf = f"{self.config.url_base}{href}"
-                            else:
-                                url_pdf = f"{self.config.url_base}/{href}"
-                        else:
-                            url_pdf = href
+                    # Extraer ID del documento
+                    pdf_id = pdf_link['href'].split('/')[-1]
 
-                        # Extraer tipo de documento
-                        tipo_doc = 'Documento Legal'
-                        if 'ley' in texto.lower():
-                            tipo_doc = 'Ley'
-                        elif 'decreto' in texto.lower():
-                            tipo_doc = 'Decreto Supremo'
-                        elif 'resolu' in texto.lower():
-                            tipo_doc = 'Resolución'
+                    # Construir URL completa del PDF
+                    url_pdf = f"{self.config.url_base}{pdf_link['href']}"
 
-                        # Extraer número de norma
-                        numero_norma = None
-                        match_numero = re.search(r'N[°º]?\s*(\d+)', texto, re.I)
-                        if match_numero:
-                            numero_norma = match_numero.group(1)
+                    # Extraer texto del card
+                    texto_card = card.get_text(separator=' | ', strip=True)
 
-                        # Extraer año
-                        año = datetime.now().year
-                        match_año = re.search(r'(20\d{2})', texto)
-                        if match_año:
-                            año = int(match_año.group(1))
+                    # Extraer tipo y número de norma
+                    tipo_doc = 'Documento Legal'
+                    numero_norma = None
 
-                        # Crear ID único
-                        if numero_norma:
-                            id_doc = f"gaceta_{tipo_doc.lower().replace(' ', '_')}_{numero_norma}_{año}"
-                        else:
-                            import hashlib
-                            hash_url = hashlib.md5(url_pdf.encode()).hexdigest()[:8]
-                            id_doc = f"gaceta_{tipo_doc.lower().replace(' ', '_')}_{hash_url}"
+                    match_ley = re.search(r'Ley N[°º]?\s*(\d+)', texto_card, re.I)
+                    match_decreto = re.search(r'Decreto Supremo N[°º]?\s*(\d+)', texto_card, re.I)
+                    match_resolucion = re.search(r'Resolución.*?N[°º]?\s*(\d+)', texto_card, re.I)
 
-                        doc = {
-                            'id_documento': id_doc,
-                            'tipo_documento': tipo_doc,
-                            'numero_norma': numero_norma or 'S/N',
-                            'anio': año,
-                            'fecha': f"{año}-01-01",
-                            'titulo': texto[:200],
-                            'url': url_pdf,
-                            'sumilla': f"{tipo_doc} de la Gaceta Oficial de Bolivia",
-                            'metadata_extra': {
-                                "fuente_oficial": "Gaceta Oficial de Bolivia",
-                                "verificable": True,
-                                "metodo_scraping": "real"
+                    if match_ley:
+                        tipo_doc = 'Ley'
+                        numero_norma = match_ley.group(1)
+                    elif match_decreto:
+                        tipo_doc = 'Decreto Supremo'
+                        numero_norma = match_decreto.group(1)
+                    elif match_resolucion:
+                        tipo_doc = 'Resolución'
+                        numero_norma = match_resolucion.group(1)
+
+                    # Extraer fecha de publicación
+                    fecha = None
+                    match_fecha = re.search(r'Fecha de Publicación:\s*(\d{4}-\d{2}-\d{2})', texto_card)
+                    if match_fecha:
+                        fecha = match_fecha.group(1)
+                    else:
+                        # Formato alternativo: "07 DE NOVIEMBRE DE 2025"
+                        match_fecha2 = re.search(r'(\d{2}) DE ([A-Z]+) DE (\d{4})', texto_card)
+                        if match_fecha2:
+                            meses = {
+                                'ENERO': '01', 'FEBRERO': '02', 'MARZO': '03', 'ABRIL': '04',
+                                'MAYO': '05', 'JUNIO': '06', 'JULIO': '07', 'AGOSTO': '08',
+                                'SEPTIEMBRE': '09', 'OCTUBRE': '10', 'NOVIEMBRE': '11', 'DICIEMBRE': '12'
                             }
-                        }
+                            dia = match_fecha2.group(1).zfill(2)
+                            mes = meses.get(match_fecha2.group(2), '01')
+                            anio = match_fecha2.group(3)
+                            fecha = f'{anio}-{mes}-{dia}'
 
-                        documentos.append(doc)
+                    # Si no hay fecha, usar fecha actual
+                    if not fecha:
+                        fecha = datetime.now().strftime('%Y-%m-%d')
+
+                    # Extraer año
+                    año = int(fecha.split('-')[0]) if fecha else datetime.now().year
+
+                    # Extraer sumilla/título
+                    sumilla = None
+                    match_sumilla = re.search(r'(\d{4})\s*\.-\s*\|?\s*(.+?)\s*\|?\s*Ver Norma', texto_card, re.DOTALL)
+                    if match_sumilla:
+                        sumilla = match_sumilla.group(2).strip()
+                        # Limpiar saltos de línea y espacios múltiples
+                        sumilla = re.sub(r'\s+', ' ', sumilla)
+                        sumilla = sumilla[:300]  # Limitar longitud
+
+                    if not sumilla:
+                        sumilla = f"{tipo_doc} de la Gaceta Oficial de Bolivia"
+
+                    # Crear ID único
+                    if numero_norma:
+                        id_doc = f"gaceta_{tipo_doc.lower().replace(' ', '_')}_{numero_norma}_{año}"
+                    else:
+                        id_doc = f"gaceta_{tipo_doc.lower().replace(' ', '_')}_{pdf_id}"
+
+                    # Crear título
+                    if numero_norma:
+                        titulo = f"{tipo_doc} N° {numero_norma}"
+                    else:
+                        titulo = tipo_doc
+
+                    doc = {
+                        'id_documento': id_doc,
+                        'tipo_documento': tipo_doc,
+                        'numero_norma': numero_norma or 'S/N',
+                        'anio': año,
+                        'fecha': fecha,
+                        'titulo': titulo,
+                        'url': url_pdf,
+                        'sumilla': sumilla,
+                        'metadata_extra': {
+                            "fuente_oficial": "Gaceta Oficial de Bolivia",
+                            "verificable": True,
+                            "metodo_scraping": "real",
+                            "pdf_id": pdf_id
+                        }
+                    }
+
+                    documentos.append(doc)
+                    logger.debug(f"  ✓ {tipo_doc} N° {numero_norma} ({fecha})")
 
                 logger.info(f"✅ Gaceta: {len(documentos)} documentos encontrados")
             else:
@@ -161,14 +198,14 @@ class GacetaOficialScraper(BaseScraper):
 
     def descargar_pdf(self, url: str, ruta_destino: Path) -> bool:
         """
-        Descargar PDF con rate limiting
+        Descargar PDF con validación y rate limiting
 
         Args:
             url: URL del PDF
             ruta_destino: Ruta local donde guardar
 
         Returns:
-            True si se descargó correctamente
+            True si se descargó correctamente un PDF válido
         """
         logger.info(f"Descargando PDF desde: {url}")
 
@@ -176,26 +213,34 @@ class GacetaOficialScraper(BaseScraper):
         time.sleep(1)
 
         try:
-            response = self.session.get(
-                url,
-                timeout=60,
-                stream=True,
-                headers={'User-Agent': 'Mozilla/5.0 (compatible; BUHO-Scraper/1.0)'}
-            )
-            response.raise_for_status()
-
             ruta_destino.parent.mkdir(parents=True, exist_ok=True)
 
-            with open(ruta_destino, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk)
+            # Descargar
+            response = self.session.get(url, timeout=60, stream=True)
+            response.raise_for_status()
 
-            if ruta_destino.stat().st_size == 0:
-                logger.error(f"✗ Archivo descargado está vacío: {url}")
+            # Verificar Content-Type
+            content_type = response.headers.get('Content-Type', '')
+            if 'text/html' in content_type:
+                logger.warning(f"⚠️ La URL retorna HTML, no PDF: {url}")
+                logger.warning(f"   Content-Type: {content_type}")
                 return False
 
-            logger.info(f"✓ PDF descargado: {ruta_destino.name} ({ruta_destino.stat().st_size} bytes)")
+            # Leer contenido completo
+            content = b''
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    content += chunk
+
+            # Validar que sea PDF
+            if not self._validar_pdf(content, url):
+                return False
+
+            # Guardar
+            with open(ruta_destino, 'wb') as f:
+                f.write(content)
+
+            logger.info(f"✓ PDF descargado y validado: {ruta_destino.name} ({len(content)} bytes)")
             return True
 
         except Exception as e:
