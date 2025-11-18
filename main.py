@@ -17,7 +17,14 @@ from datetime import datetime
 
 from config import list_active_sites, get_site_config
 from scraper import run_site_pipeline, run_all_sites_pipeline
-from sync import SupabaseSyncExtended
+
+# Importación opcional de sync (solo si se necesita)
+try:
+    from sync import SupabaseSyncExtended
+    SYNC_AVAILABLE = True
+except ImportError:
+    SYNC_AVAILABLE = False
+    SupabaseSyncExtended = None
 
 # Configurar logging
 logging.basicConfig(
@@ -182,6 +189,12 @@ def cmd_sync_supabase(args):
     """Sincronizar datos con Supabase"""
     print("\n🔄 Sincronización con Supabase\n")
     print("-" * 80)
+
+    if not SYNC_AVAILABLE:
+        print("\n❌ Error: Módulo de sincronización no disponible")
+        print("Instalar dependencias: pip install supabase python-dotenv")
+        print()
+        sys.exit(1)
 
     try:
         # Inicializar sincronizador

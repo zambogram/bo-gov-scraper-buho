@@ -8,6 +8,9 @@ from .tsj_scraper import TSJScraper
 from .asfi_scraper import ASFIScraper
 from .sin_scraper import SINScraper
 from .contraloria_scraper import ContraloriaScraper
+from .gaceta_scraper import GacetaScraper
+from .att_scraper import ATTScraper
+from .mintrabajo_scraper import MinTrabajoScraper
 
 # Registro de scrapers disponibles
 SCRAPERS = {
@@ -16,7 +19,9 @@ SCRAPERS = {
     'asfi': ASFIScraper,
     'sin': SINScraper,
     'contraloria': ContraloriaScraper,
-    # 'gaceta_oficial': GacetaScraper,  # Por implementar
+    'gaceta_oficial': GacetaScraper,
+    'att': ATTScraper,
+    'mintrabajo': MinTrabajoScraper,
 }
 
 
@@ -47,6 +52,9 @@ __all__ = [
     "ASFIScraper",
     "SINScraper",
     "ContraloriaScraper",
+    "GacetaScraper",
+    "ATTScraper",
+    "MinTrabajoScraper",
     "get_scraper",
     "SCRAPERS"
 ]

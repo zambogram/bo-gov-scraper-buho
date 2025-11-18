@@ -136,7 +136,7 @@ sites:
     url_search: "https://www.gacetaoficialdebolivia.gob.bo/ediciones"
     prioridad: 1
     ola: 1
-    activo: false  # Por implementar en siguiente fase
+    activo: true
     metadatos:
       tipo_documentos:
         - "Ley"
@@ -153,7 +153,56 @@ sites:
       paginacion: true
       items_por_pagina: 100
       delay_entre_requests: 3
-      notas: "Scraper pendiente de implementación. Estructura lista para integración."
+
+  att:
+    id: att
+    nombre: "Autoridad de Regulación y Fiscalización de Telecomunicaciones y Transportes"
+    tipo: "Entidad Reguladora"
+    categoria: "Regulación Sectorial"
+    url_base: "https://www.att.gob.bo"
+    url_search: "https://www.att.gob.bo/normativa"
+    prioridad: 3
+    ola: 2
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Resolución Administrativa"
+        - "Reglamento"
+        - "Norma Técnica"
+      fecha_inicio: "2010-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: false
+    scraper:
+      tipo: "static"
+      paginacion: true
+      items_por_pagina: 30
+      delay_entre_requests: 2
+
+  mintrabajo:
+    id: mintrabajo
+    nombre: "Ministerio de Trabajo, Empleo y Previsión Social"
+    tipo: "Ministerio"
+    categoria: "Administración Pública"
+    url_base: "https://www.mintrabajo.gob.bo"
+    url_search: "https://www.mintrabajo.gob.bo/normativa"
+    prioridad: 3
+    ola: 2
+    activo: true
+    metadatos:
+      tipo_documentos:
+        - "Resolución Ministerial"
+        - "Resolución Bi-Ministerial"
+        - "Reglamento Laboral"
+      fecha_inicio: "2000-01-01"
+      idiomas: ["es"]
+      formato_principal: "PDF"
+      requiere_ocr: true
+    scraper:
+      tipo: "static"
+      paginacion: true
+      items_por_pagina: 40
+      delay_entre_requests: 2
 
 # Configuración global
 global_config:
