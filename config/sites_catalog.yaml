@@ -1,0 +1,199 @@
+# =============================================================================
+# CATÁLOGO DE SITIOS PARA SCRAPING ESPECIALIZADO
+# =============================================================================
+# Este archivo contiene configuraciones para scrapers especializados que usan
+# APIs, SPAs o técnicas avanzadas (NO simple HTML scraping)
+#
+# Cada sitio tiene su propio scraper en scraper/sites/
+
+sites:
+  # ===========================================================================
+  # TCP - JURISPRUDENCIA (Tribunal Constitucional Plurinacional)
+  # ===========================================================================
+  # Scraper basado en API para obtener TODA la jurisprudencia del TCP
+  # Fuentes:
+  #   - https://buscador.tcpbolivia.bo/
+  #   - https://jurisprudencia.tcpbolivia.bo/
+  #
+  # IMPORTANTE: Este NO es el scraper de gacetas TCP (tomos/guías)
+  # Este scraper obtiene sentencias, resoluciones, autos constitucionales, etc.
+  # ===========================================================================
+
+  tcp_jurisprudencia:
+    # Identificación
+    id: "tcp_jurisprudencia"
+    nombre: "TCP - Jurisprudencia Constitucional"
+    descripcion: "Sentencias, resoluciones y autos del Tribunal Constitucional Plurinacional"
+
+    # URLs base (la API real se configura abajo)
+    url_base: "https://buscador.tcpbolivia.bo"
+    url_alternativa: "https://jurisprudencia.tcpbolivia.bo"
+
+    # Configuración del scraper
+    scraper:
+      tipo: "api"  # Tipo de scraper: api, selenium, playwright
+      clase: "TCPJurisprudenciaScraper"  # Clase Python que implementa el scraper
+      modulo: "scraper.sites.tcp_jurisprudencia_scraper"
+
+      # Paginación
+      paginacion:
+        habilitada: true
+        tipo: "offset_limit"  # offset_limit, page_number, cursor
+        parametros:
+          # Nombres de parámetros en la API (CONFIGURAR DESPUÉS DE INSPECCIONAR)
+          pagina: "page"          # Parámetro de número de página
+          tamaño: "size"          # Parámetro de tamaño de página
+          offset: "offset"        # Parámetro de offset (si aplica)
+          limite: "limit"         # Parámetro de límite (si aplica)
+
+        # Configuración de página
+        tamaño_pagina_default: 50      # Tamaño de página por defecto
+        tamaño_pagina_max: 100         # Tamaño máximo de página
+        max_paginas: 10000             # Máximo de páginas a iterar (seguridad)
+
+      # Endpoints de la API
+      # NOTA: Estos son PLANTILLAS - debes llenarlos después de inspeccionar
+      # el Network tab del navegador
+      endpoints:
+        # Endpoint principal de búsqueda de jurisprudencia
+        busqueda_general:
+          url: "/api/jurisprudencia/buscar"  # CONFIGURAR después de inspeccionar
+          metodo: "POST"  # GET o POST
+          descripcion: "Búsqueda general de jurisprudencia"
+          parametros_default:
+            tipo_documento: ""  # vacío = todos
+            año: ""
+            materia: ""
+            texto_busqueda: ""
+          headers:
+            Content-Type: "application/json"
+            Accept: "application/json"
+
+        # Endpoint de búsqueda por resolución
+        busqueda_resolucion:
+          url: "/api/busqueda-resolucion"  # CONFIGURAR
+          metodo: "POST"
+          descripcion: "Búsqueda por número de resolución"
+
+        # Endpoint de búsqueda por fecha de ingreso
+        busqueda_fecha_ingreso:
+          url: "/api/busqueda-fecha-ingreso"  # CONFIGURAR
+          metodo: "POST"
+          descripcion: "Búsqueda por fecha de ingreso"
+
+        # Endpoint de búsqueda por fecha de resolución
+        busqueda_fecha_resolucion:
+          url: "/api/busqueda-fecha-resolucion"  # CONFIGURAR
+          metodo: "POST"
+          descripcion: "Búsqueda por fecha de resolución"
+
+        # Endpoint de búsqueda de sentencias de unificación
+        busqueda_unificacion:
+          url: "/api/busqueda-unificacion"  # CONFIGURAR
+          metodo: "POST"
+          descripcion: "Búsqueda de sentencias de unificación"
+
+        # Endpoint de búsqueda de avocación
+        busqueda_avocacion:
+          url: "/api/busqueda-avocacion"  # CONFIGURAR
+          metodo: "POST"
+          descripcion: "Búsqueda de sentencias de avocación"
+
+      # Mapeo de campos JSON -> campos internos
+      # Ajustar según la estructura REAL del JSON que devuelve la API
+      mapeo_campos:
+        # Campo que contiene la lista de resultados en el JSON
+        campo_resultados: "data.items"  # Ej: response.data.items o results.documents
+
+        # Campo que contiene el total de resultados
+        campo_total: "data.total"  # Ej: response.data.total o pagination.totalElements
+
+        # Campos de cada documento individual
+        id: "id"                          # ID único del documento
+        numero_resolucion: "numeroResolucion"  # Número de resolución/sentencia
+        tipo_documento: "tipoDocumento"   # Tipo (Sentencia, Auto, Resolución)
+        fecha_resolucion: "fechaResolucion"  # Fecha de la resolución
+        fecha_ingreso: "fechaIngreso"     # Fecha de ingreso
+        materia: "materia"                # Materia/área
+        sumilla: "sumilla"                # Sumilla/resumen
+        expediente: "expediente"          # Número de expediente
+        partes: "partes"                  # Partes del proceso
+        magistrado: "magistrado"          # Magistrado ponente
+        url_pdf: "urlPdf"                 # URL del PDF (si está en JSON)
+        url_detalle: "urlDetalle"         # URL de página de detalle
+
+    # Metadatos del sitio
+    metadatos:
+      area_derecho: "Constitucional"
+      requiere_ocr: true  # Los PDFs pueden estar escaneados
+      tipo_documentos:
+        - "Sentencia Constitucional"
+        - "Auto Constitucional"
+        - "Resolución"
+        - "Sentencia de Unificación"
+        - "Sentencia de Avocación"
+
+      # Rangos temporales para iterar
+      rango_años:
+        inicio: 1999  # Año de inicio del TCP
+        fin: null     # null = año actual
+
+    # Configuración de descarga
+    descarga:
+      guardar_pdf: true
+      guardar_json: true  # Guardar JSON raw de cada documento
+      directorio: "data/raw/tcp_jurisprudencia"
+      timeout: 60
+      reintentos: 3
+      delay_entre_requests: 1  # segundos
+
+    # Configuración de extracción
+    extraccion:
+      # Si el JSON no incluye URL de PDF, configurar patrón
+      generar_url_pdf: true
+      patron_url_pdf: "https://buscador.tcpbolivia.bo/documentos/{id}.pdf"  # CONFIGURAR
+
+      # Si necesitas hacer request adicional para obtener el PDF
+      endpoint_descarga_pdf:
+        url: "/api/documentos/{id}/descargar"  # CONFIGURAR
+        metodo: "GET"
+
+    # Configuración de validación de cobertura
+    validacion:
+      # Campo JSON que indica el total de registros
+      campo_total_registros: "data.total"  # AJUSTAR según API real
+
+      # Modo de validación
+      modo: "comparar_total"  # comparar_total, verificar_ids, ambos
+
+      # Tolerancia (algunos documentos pueden fallar)
+      tolerancia_porcentaje: 5  # Aceptar hasta 5% de pérdida
+
+    # Estado
+    habilitado: true
+    prioridad: 1
+
+# =============================================================================
+# CONFIGURACIÓN GLOBAL
+# =============================================================================
+configuracion_global:
+  # Directorios
+  directorio_base_datos: "data/raw"
+  directorio_exports: "exports"
+  directorio_logs: "logs"
+
+  # Scraping
+  max_workers: 3  # Hilos concurrentes para scrapers
+  timeout_default: 30
+  reintentos_default: 3
+
+  # User agent
+  user_agent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+  # Rate limiting
+  delay_entre_requests: 1.5  # segundos
+  delay_entre_sitios: 5      # segundos
+
+  # Logging
+  nivel_log: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  log_a_archivo: true
