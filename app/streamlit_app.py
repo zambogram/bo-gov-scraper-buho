@@ -14,7 +14,7 @@ import logging
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from config import settings, get_site_config, list_active_sites, get_last_update_date
+from config import settings, get_site_config, list_active_sites
 from scraper import run_site_pipeline, run_all_sites_pipeline
 from scraper.models import Documento
 
@@ -145,9 +145,23 @@ def render_sidebar():
         st.write(f"**Prioridad:** {site_config.prioridad}")
         st.write(f"**Ola:** {site_config.ola}")
 
-        last_update = get_last_update_date(selected_site_id)
-        if last_update:
-            st.write(f"**Última actualización:**  \n{last_update.strftime('%Y-%m-%d %H:%M')}")
+        # Obtener última actualización desde el índice
+        tracking_path = Path(f"data/index/{selected_site_id}/index.json")
+        if tracking_path.exists():
+            try:
+                with open(tracking_path) as f:
+                    data = json.load(f)
+                    last_update = data.get('last_updated', 'Nunca')
+                    if last_update != 'Nunca':
+                        try:
+                            dt = datetime.fromisoformat(last_update)
+                            st.write(f"**Última actualización:**  \n{dt.strftime('%Y-%m-%d %H:%M')}")
+                        except:
+                            st.write(f"**Última actualización:** {last_update}")
+                    else:
+                        st.write("**Última actualización:** Nunca")
+            except:
+                st.write("**Última actualización:** Nunca")
         else:
             st.write("**Última actualización:** Nunca")
 
