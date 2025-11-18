@@ -58,23 +58,38 @@ sites:
     tipo: "Entidad Reguladora"
     categoria: "Regulación Financiera"
     url_base: "https://www.asfi.gob.bo"
-    url_search: "https://www.asfi.gob.bo/index.php/normativa"
+    url_search: "https://www.asfi.gob.bo/pb/normativa-nacional"
     prioridad: 2
     ola: 1
     activo: true
     metadatos:
       tipo_documentos:
+        - "Ley"
+        - "Reglamento"
         - "Resolución Administrativa"
         - "Circular"
-        - "Reglamento"
       fecha_inicio: "2000-01-01"
       idiomas: ["es"]
       formato_principal: "PDF"
       requiere_ocr: false
+      # URLs de fuentes de normativa ASFI
+      fuentes_normativa:
+        - nombre: "Normativa Nacional (Leyes)"
+          url: "/pb/normativa-nacional"
+          tipo_default: "Ley"
+        - nombre: "Reglamentos Vigentes"
+          url: "/pb/reglamentos-vigentes"
+          tipo_default: "Reglamento"
+        - nombre: "Normativa Internacional"
+          url: "/la/normativa-internacional"
+          tipo_default: "Normativa Internacional"
+        - nombre: "Reglamentos de Fondos de Inversión"
+          url: "/pb/reglamentos-internos-fondos-inversion"
+          tipo_default: "Reglamento"
     scraper:
       tipo: "static"
-      paginacion: true
-      items_por_pagina: 30
+      paginacion: false
+      items_por_pagina: 100
       delay_entre_requests: 1
 
   sin:
