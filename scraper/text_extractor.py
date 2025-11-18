@@ -11,7 +11,6 @@ from typing import Dict, Tuple, Optional
 
 # PDF processing
 import fitz  # PyMuPDF
-from pdfminer.high_level import extract_text as pdfminer_extract_text
 from pdf2image import convert_from_path
 
 # OCR
@@ -138,14 +137,7 @@ def extract_text_digital(pdf_path: str) -> str:
 
     except Exception as e:
         logger.error(f"Error al extraer texto digital de {pdf_path}: {e}")
-        # Fallback: intentar con pdfminer
-        try:
-            logger.info("Intentando con pdfminer como fallback...")
-            text = pdfminer_extract_text(pdf_path)
-            return text
-        except Exception as e2:
-            logger.error(f"Error con pdfminer: {e2}")
-            return ""
+        return ""
 
 
 def clean_text(raw_text: str) -> str:
