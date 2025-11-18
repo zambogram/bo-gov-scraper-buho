@@ -1,1 +1,21 @@
+# Web Scraping
+requests==2.31.0
+beautifulsoup4==4.12.3
+lxml==5.1.0
+selenium==4.16.0
 
+# OCR y procesamiento de imágenes
+pytesseract==0.3.10
+Pillow==10.2.0
+pdf2image==1.17.0
+
+# Análisis y extracción de datos
+pandas==2.2.0
+openpyxl==3.1.2
+
+# Interfaz de usuario
+streamlit==1.31.0
+
+# Utilidades
+python-dotenv==1.0.1
+tqdm==4.66.1
