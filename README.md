@@ -7,6 +7,7 @@ Sistema profesional de scraping, procesamiento, normalización y exportación de
 ### ✨ Funcionalidades Completas
 
 - **Scraping Multi-Sitio**: Scrapea simultáneamente +33 sitios del gobierno boliviano
+- **Scraping con Selenium**: Scraper especializado para TCP Jurisprudencia con navegación dinámica
 - **Procesamiento Inteligente**: PDF, DOC, DOCX e imágenes con OCR automático
 - **Extracción de Metadatos**: Extrae automáticamente número de ley, área del derecho, fechas, etc.
 - **División de PDFs**: Divide PDFs grandes en secciones manejables
@@ -21,7 +22,7 @@ El sistema está configurado para scrapear 33+ sitios incluyendo:
 
 - Gaceta Oficial de Bolivia
 - Asamblea Legislativa Plurinacional
-- Tribunal Constitucional
+- **Tribunal Constitucional Plurinacional** (con Selenium para jurisprudencia completa)
 - Ministerios (Justicia, Economía, Trabajo, Salud, etc.)
 - Órgano Judicial
 - Contraloría General del Estado
@@ -35,6 +36,7 @@ El sistema está configurado para scrapear 33+ sitios incluyendo:
 - Python 3.8+
 - Tesseract OCR (para reconocimiento de texto en imágenes)
 - LibreOffice (opcional, para convertir DOC a PDF)
+- Chrome/Chromium (para scraping del TCP con Selenium)
 
 ### Instalación de Tesseract
 
@@ -84,6 +86,30 @@ Scrapea todos los sitios configurados y descarga documentos:
 ```bash
 python main.py --scrapear --workers 5
 ```
+
+#### 1.1. Scraping del TCP (Tribunal Constitucional) con Selenium
+
+Scrapea jurisprudencia del TCP usando Selenium para navegación dinámica:
+
+```bash
+# Solo scraping del TCP
+python main.py --tcp
+
+# Flujo completo del TCP (scrapear + procesar + exportar)
+python main.py --tcp-completo --ocr
+```
+
+El scraper del TCP extrae:
+- Número de resolución
+- Tipo de jurisprudencia
+- Tipo resolutivo
+- Fecha
+- Sumilla completa
+- Magistrados
+- Área/materia
+- PDFs de sentencias
+
+Ver documentación completa en: `scraper/sites/README_TCP.md`
 
 #### 2. Procesamiento de Documentos
 
@@ -189,6 +215,10 @@ bo-gov-scraper-buho/
 ├── scraper/
 │   ├── __init__.py
 │   ├── multi_site_scraper.py      # Scraper principal
+│   ├── sites/                     # Scrapers especializados
+│   │   ├── __init__.py
+│   │   ├── tcp_jurisprudencia_scraper.py  # Scraper TCP con Selenium
+│   │   └── README_TCP.md          # Documentación del TCP scraper
 │   ├── document_processor.py      # Procesador con OCR
 │   ├── metadata.py                # Extractor de metadatos
 │   ├── pdf_splitter.py            # Divisor de PDFs
@@ -199,6 +229,7 @@ bo-gov-scraper-buho/
 │   └── excel_exporter.py
 ├── data/
 │   ├── raw/                       # Documentos originales
+│   │   └── tcp_jurisprudencia/    # Sentencias del TCP
 │   ├── processed/                 # Documentos procesados
 │   └── laws.db                    # Base de datos SQLite
 ├── exports/                        # Exportaciones
@@ -325,14 +356,24 @@ for archivo in archivos:
 # 1. Scrapear todos los sitios (puede tardar horas)
 python main.py --scrapear --workers 5
 
-# 2. Procesar documentos con OCR y división
+# 2. Scrapear el TCP con Selenium (puede tardar varias horas)
+python main.py --tcp
+
+# 3. Procesar documentos con OCR y división
 python main.py --procesar --ocr --dividir-pdfs
 
-# 3. Exportar a todos los formatos
+# 4. Exportar a todos los formatos
 python main.py --exportar --formato csv json excel
 
-# 4. Ver estadísticas
+# 5. Ver estadísticas
 python main.py --stats
+```
+
+### Para Scraping Solo del TCP
+
+```bash
+# Flujo completo del TCP en un solo comando
+python main.py --tcp-completo --ocr --dividir-pdfs
 ```
 
 ### Para Actualizaciones Periódicas
