@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # Importar módulos del scraper
 from scraper.multi_site_scraper import MultiSiteScraper
+from scraper.sites.tcp_jurisprudencia_scraper import TCPJurisprudenciaScraper
 from scraper.document_processor import DocumentProcessor
 from scraper.metadata import MetadataExtractor
 from scraper.pdf_splitter import PDFSplitter
@@ -37,6 +38,7 @@ class BuhoScraper:
         print("=" * 60)
 
         self.scraper = MultiSiteScraper()
+        self.tcp_scraper = TCPJurisprudenciaScraper()
         self.processor = DocumentProcessor()
         self.metadata_extractor = MetadataExtractor()
         self.pdf_splitter = PDFSplitter()
@@ -74,6 +76,42 @@ class BuhoScraper:
             leyes_encontradas=resultados['total_documentos'],
             estado='completado'
         )
+
+        return resultados
+
+    def ejecutar_scraping_tcp(self):
+        """
+        Ejecuta el scraping específico del TCP (Tribunal Constitucional Plurinacional)
+        usando Selenium para navegar por el HTML dinámico
+        """
+        print("\n🚀 FASE 1: SCRAPING TCP - JURISPRUDENCIA (con Selenium)")
+        print("-" * 60)
+
+        # Registrar inicio de scraping
+        scraping_id = self.db.registrar_scraping(
+            "TCP Jurisprudencia",
+            datetime.now()
+        )
+
+        # Scrapear el TCP
+        resultados = self.tcp_scraper.scrapear_todo()
+
+        print(f"\n✅ Scraping TCP completado:")
+        print(f"   - Sentencias encontradas: {resultados['total_procesadas']}")
+        print(f"   - PDFs descargados: {self.tcp_scraper.estadisticas['pdfs_descargados']}")
+
+        # Actualizar registro de scraping
+        self.db.actualizar_scraping(
+            scraping_id,
+            fecha_fin=datetime.now().isoformat(),
+            leyes_encontradas=resultados['total_procesadas'],
+            estado='completado'
+        )
+
+        # Exportar resultados crudos
+        if resultados['sentencias']:
+            self.tcp_scraper.exportar_resultados(resultados['sentencias'], formato='json')
+            self.tcp_scraper.exportar_resultados(resultados['sentencias'], formato='csv')
 
         return resultados
 
@@ -253,6 +291,8 @@ def main():
 
     parser.add_argument('--scrapear', action='store_true',
                        help='Ejecutar scraping de sitios web')
+    parser.add_argument('--tcp', action='store_true',
+                       help='Ejecutar scraping del TCP (Tribunal Constitucional) con Selenium')
     parser.add_argument('--procesar', action='store_true',
                        help='Procesar documentos descargados')
     parser.add_argument('--exportar', action='store_true',
@@ -261,6 +301,8 @@ def main():
                        help='Mostrar estadísticas')
     parser.add_argument('--completo', action='store_true',
                        help='Ejecutar flujo completo (scrapear + procesar + exportar)')
+    parser.add_argument('--tcp-completo', action='store_true',
+                       help='Ejecutar flujo completo del TCP (scrapear + procesar + exportar)')
 
     parser.add_argument('--workers', type=int, default=5,
                        help='Número de hilos para scraping (default: 5)')
@@ -275,8 +317,8 @@ def main():
     args = parser.parse_args()
 
     # Si no se especifica ninguna acción, mostrar ayuda
-    if not (args.scrapear or args.procesar or args.exportar or
-            args.stats or args.completo):
+    if not (args.scrapear or args.tcp or args.procesar or args.exportar or
+            args.stats or args.completo or args.tcp_completo):
         parser.print_help()
         sys.exit(0)
 
@@ -284,8 +326,22 @@ def main():
     buho = BuhoScraper()
 
     try:
+        # Flujo completo del TCP
+        if args.tcp_completo:
+            buho.ejecutar_scraping_tcp()
+            buho.procesar_documentos(
+                directorio="data/raw/tcp_jurisprudencia",
+                aplicar_ocr=args.ocr,
+                dividir_pdfs=args.dividir_pdfs
+            )
+            buho.exportar_datos(formatos=args.formato)
+
+        # Scraping individual
         if args.completo or args.scrapear:
             buho.ejecutar_scraping_completo(max_workers=args.workers)
+
+        if args.tcp:
+            buho.ejecutar_scraping_tcp()
 
         if args.completo or args.procesar:
             buho.procesar_documentos(

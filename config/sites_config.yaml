@@ -35,16 +35,34 @@ sites:
         law_title: "h3.titulo"
         law_date: "span.fecha"
 
-  # ========== TRIBUNAL CONSTITUCIONAL ==========
-  - name: "Tribunal Constitucional Plurinacional"
-    url: "https://www.tcpbolivia.bo"
+  # ========== TRIBUNAL CONSTITUCIONAL - JURISPRUDENCIA ==========
+  # NOTA: Este sitio usa un scraper especializado con Selenium (tcp_jurisprudencia_scraper.py)
+  # No es procesado por el MultiSiteScraper, sino por TCPJurisprudenciaScraper
+  - name: "TCP - Jurisprudencia (Selenium)"
+    url: "https://jurisprudencia.tcpbolivia.bo/"
+    url_alternativa: "https://buscador.tcpbolivia.bo/busqueda-jurisprudencia"
     enabled: true
     priority: 3
     area_derecho: "Constitucional"
+    tipo_contenido: "Jurisprudencia"
+    scraper_type: "selenium"  # Indica que requiere Selenium
     scraping_config:
-      list_page: "/sentencias"
+      # Este sitio requiere scraping con Selenium debido a que:
+      # 1. La tabla se rellena dinámicamente con HTML (no JSON)
+      # 2. Requiere navegación por páginas
+      # 3. Requiere click en "Ver Ficha" para detalles completos
       pagination: true
-      max_pages: 200
+      max_pages: 1000  # TCP tiene mucha jurisprudencia
+      campos_extraidos:
+        - numero_resolucion
+        - tipo_jurisprudencia
+        - tipo_resolutivo
+        - fecha
+        - sumilla
+        - magistrados
+        - area_materia
+        - url_pdf
+      usar_tcp_scraper: true  # Flag para indicar que se debe usar el scraper especializado
 
   # ========== MINISTERIO DE JUSTICIA ==========
   - name: "Ministerio de Justicia"
